@@ -1,20 +1,22 @@
+// displays the spreadsheet using ncurses if defined
+// not defined usually for debugging purposes
+#define RENDER_TUI
+
+#ifndef CONFIG_PATH
+#define CONFIG_PATH "../config.h"
+#endif
+
 #include <ncurses.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#ifndef CONFIG_PATH
-#define CONFIG_PATH "../config.h"
-#endif
 #include "cli/tui.h"
+#include "cli/spreadsheet_ui.h"
 
-#include "client.c"
 #include "parsing.h"
 #include "parsing.c"
 #include "vec.h"
 
-// displays the spreadsheet using ncurses if defined
-// not defined usually for debugging purposes
-/* #define RENDER_TUI */
 
 /* #define GREY 100 */
 typedef enum {

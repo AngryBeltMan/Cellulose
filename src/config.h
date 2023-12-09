@@ -31,4 +31,5 @@ static void initCellColors() {
     init_pair(COLUMN_CELL_ID, COLOR_BLACK, COLOR_GREEN );
 
     init_pair(ROW_CELL_ID, COLOR_BLACK, COLOR_CYAN );
+
 }

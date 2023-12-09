@@ -7,6 +7,15 @@
 #include "cell.h"
 #include "vec.h"
 
+#define ELEMENTS client.spread_sheet.elements
+#define ELEMENTS_P client->spread_sheet.elements
+#define CELL_VAL(_y, _x) ELEMENTS[_y].elements[_x].cell_value.str
+#define CELL_VAL_P(_y, _x) ELEMENTS_P[_y].elements[_x].cell_value.str
+#define CELL_P(_y, _x) ELEMENTS_P[_y].elements[_x]
+#define CELL(_y, _x) ELEMENTS[_y].elements[_x]
+#define ROW(_y) ELEMENTS[_y]
+#define ROW_P(_y) ELEMENTS_P[_y]
+
 typedef  VEC(cell_t) row_t;
 typedef  VEC(row_t) spreadsheet_t;
 
@@ -38,10 +47,6 @@ static Cellulose newEmpty() {
 // writes to a given file with arg seperator seperating each value
 void writeContents(char seperator, row_t* spreadsheet, FILE* output );
 
-// takes in the client and renders its contents
-// the entire client is needed and not just the spreadsheet because there is other info needed
-// like the cursor position
-void renderSpreadsheet(Cellulose *cellulose, char* row_cell);
 // deconstructor for struct Cellulose
 void freeSpreadsheet(Cellulose cellulose) {
     // iterates over all of the rows

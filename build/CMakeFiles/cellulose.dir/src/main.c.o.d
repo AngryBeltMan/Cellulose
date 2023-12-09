@@ -71,11 +71,10 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /home/ericbruh/Downloads/cellulose/src/vec.h /usr/include/assert.h \
   /home/ericbruh/Downloads/cellulose/src/cli/../config.h \
-  /home/ericbruh/Downloads/cellulose/src/client.c \
-  /home/ericbruh/Downloads/cellulose/src/client.h \
-  /home/ericbruh/Downloads/cellulose/src/config.h /usr/include/errno.h \
-  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
-  /usr/include/x86_64-linux-gnu/asm/errno.h \
+  /home/ericbruh/Downloads/cellulose/src/cli/spreadsheet_ui.h \
+  /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
   /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
   /home/ericbruh/Downloads/cellulose/src/parsing.h \
+  /home/ericbruh/Downloads/cellulose/src/client.h \
   /home/ericbruh/Downloads/cellulose/src/parsing.c

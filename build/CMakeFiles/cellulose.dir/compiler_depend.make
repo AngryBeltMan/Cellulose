@@ -82,9 +82,7 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
   ../src/vec.h \
   /usr/include/assert.h \
   ../src/config.h \
-  ../src/client.c \
-  ../src/client.h \
-  ../src/config.h \
+  ../src/cli/spreadsheet_ui.h \
   /usr/include/errno.h \
   /usr/include/x86_64-linux-gnu/bits/errno.h \
   /usr/include/linux/errno.h \
@@ -92,6 +90,7 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
   /usr/include/asm-generic/errno.h \
   /usr/include/asm-generic/errno-base.h \
   ../src/parsing.h \
+  ../src/client.h \
   ../src/parsing.c
 
 
@@ -109,7 +108,7 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 
 /usr/include/errno.h:
 
-../src/client.c:
+../src/cli/spreadsheet_ui.h:
 
 ../src/config.h:
 

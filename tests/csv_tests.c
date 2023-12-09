@@ -14,8 +14,6 @@
 #include "tests.h"
 #include <string.h>
 
-#define ELEMENTS client.spread_sheet.elements
-#define CELL_VAL(_y, _x) ELEMENTS[_y].elements[_x].cell_value.str
 int parse_single_row() {
     Cellulose client = fromCSV("tests/csvs/single_row.csv");
     T_ASSERT(client.spread_sheet.length == 1);
