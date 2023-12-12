@@ -89,6 +89,13 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
   /usr/include/x86_64-linux-gnu/asm/errno.h \
   /usr/include/asm-generic/errno.h \
   /usr/include/asm-generic/errno-base.h \
+  ../src/cli/cursor_ui.h \
+  ../src/cursor/cursor_include.h \
+  ../src/cursor/cursor.h \
+  ../src/vim_bindings/vim_bindings.h \
+  ../src/client.h \
+  ../src/cursor/cursor.h \
+  ../src/vim_bindings/vim_cursor_movement.h \
   ../src/parsing.h \
   ../src/client.h \
   ../src/parsing.c
@@ -97,6 +104,12 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 ../src/parsing.c:
 
 ../src/parsing.h:
+
+../src/vim_bindings/vim_bindings.h:
+
+../src/cursor/cursor_include.h:
+
+../src/cli/cursor_ui.h:
 
 /usr/include/asm-generic/errno-base.h:
 
@@ -134,6 +147,8 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 
 /usr/include/alloca.h:
 
+../src/vim_bindings/vim_cursor_movement.h:
+
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
@@ -167,6 +182,8 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
+
+../src/cursor/cursor.h:
 
 /usr/lib/llvm-14/lib/clang/14.0.0/include/stddef.h:
 

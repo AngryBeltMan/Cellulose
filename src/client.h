@@ -9,34 +9,30 @@
 
 #define ELEMENTS client.spread_sheet.elements
 #define ELEMENTS_P client->spread_sheet.elements
+#define SHEET_P client->spread_sheet
 #define CELL_VAL(_y, _x) ELEMENTS[_y].elements[_x].cell_value.str
 #define CELL_VAL_P(_y, _x) ELEMENTS_P[_y].elements[_x].cell_value.str
 #define CELL_P(_y, _x) ELEMENTS_P[_y].elements[_x]
 #define CELL(_y, _x) ELEMENTS[_y].elements[_x]
 #define ROW(_y) ELEMENTS[_y]
 #define ROW_P(_y) ELEMENTS_P[_y]
+#define CLIENT_SHEET_WIDTH 11
+#define CLIENT_SHEET_HEIGHT 39
 
 typedef  VEC(cell_t) row_t;
 typedef  VEC(row_t) spreadsheet_t;
 
 typedef struct {
-    // the cursor positon
+    // the positon of the spreadsheet. Only cells within an area of (pos_x + screen width, pos_y + screen height) will be rendered
     uint16_t pos_x,pos_y;
     // the spreadsheet
     spreadsheet_t spread_sheet;
-    // the viewing range of the spread sheet
-    // What this means is only the cells in the spreadsheet between range_x_min, range_x_max, range_y_min, and range_y_max are rendered on the tui.
-    uint16_t range_x_min, range_x_max, range_y_min, range_y_max;
 } Cellulose;
 
 
 // Constructor for struct Cellulose. All of the attributes have their own "default" value.
 static Cellulose newEmpty() {
     Cellulose cell;
-    cell.range_x_max = 16;
-    cell.range_x_min = 5;
-    cell.range_y_min = 0;
-    cell.range_y_max = 39;
     cell.pos_x = 0;
     cell.pos_y = 0;
     cell.spread_sheet = (spreadsheet_t)VEC_NEW(row_t);
@@ -62,3 +58,7 @@ void freeSpreadsheet(Cellulose cellulose) {
 }
 
 
+// checks to see if a certain cell coordinate exists in the spreadsheet
+static bool cellExist(Cellulose *client, size_t x, size_t y) {
+    return (y < SHEET_P.length) ? (x < ROW_P(y).length): false;
+}

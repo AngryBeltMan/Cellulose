@@ -75,6 +75,13 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
   /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
   /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
+  /home/ericbruh/Downloads/cellulose/src/cli/cursor_ui.h \
+  /home/ericbruh/Downloads/cellulose/src/cli/../cursor/cursor_include.h \
+  /home/ericbruh/Downloads/cellulose/src/cli/../cursor/cursor.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_bindings.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/../client.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cursor/cursor.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_cursor_movement.h \
   /home/ericbruh/Downloads/cellulose/src/parsing.h \
   /home/ericbruh/Downloads/cellulose/src/client.h \
   /home/ericbruh/Downloads/cellulose/src/parsing.c

@@ -2,35 +2,27 @@
 // not defined usually for debugging purposes
 #define RENDER_TUI
 
-#ifndef CONFIG_PATH
-#define CONFIG_PATH "../config.h"
-#endif
-
 #include <ncurses.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "cli/tui.h"
 #include "cli/spreadsheet_ui.h"
+#include "cli/cursor_ui.h"
+#include "vim_bindings/vim_bindings.h"
 
 #include "parsing.h"
 #include "parsing.c"
 #include "vec.h"
 
 
-/* #define GREY 100 */
-typedef enum {
-    Up,
-    Down,
-    Left,
-    Right,
-} movement;
 
 
 int main(void) {
 #ifdef RENDER_TUI
     startScreen();
 #endif
+    cursor cursor = initCursor();
     char* cell = malloc(15);
     // user input
     int in = 0x0;
@@ -38,14 +30,16 @@ int main(void) {
     Cellulose client = fromCSV("../test.csv");
 #ifdef RENDER_TUI
     renderSpreadsheet(&client, cell);
-    free(cell);
+    renderCursor(&cursor, &client);
     do {
         in = getch();
-        refresh();
+        parseVimMotion(&client, &cursor, in);
+        renderSpreadsheet(&client, cell);
+        renderCursor(&cursor, &client);
     // exit when the escape key is pressed
     } while (in != 27);
 #endif
-
+    free(cell);
     // if true it means an error has occured deallocating
     if (cleanTUI(client)) { exit(1); }
     exit(0);

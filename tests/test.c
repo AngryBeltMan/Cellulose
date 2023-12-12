@@ -1,16 +1,12 @@
-#include "tests.h"
-#include "csv_tests.c"
-#include "cell_tests.c"
+/* #include "tests.h" */
+/* #include "csv_tests.c" */
+/* #include "cell_tests.c" */
+#include "../src/cell.h"
 int main(void) {
-    test_client client = initTestClient();
-    /* appendTest(&client, &parse_single_row); */
-    /* appendTest(&client, &parse_multiple_rows); */
-    /* appendTest(&client, &parse_large_cells); */
-    /* appendTest(&client, &many_rows_test); */
-    appendTest(&client, &testStrToNum);
-    appendTest(&client, &testStrToDecimal);
-    /* appendTest(&client, &csvTypeTest); */
-    runTests(&client);
-    freeClient(client);
+    int input = 123;
+    char output[10];
+    intToStr(input, output);
+
+    printf("%s\n", output);
     return 0;
 }

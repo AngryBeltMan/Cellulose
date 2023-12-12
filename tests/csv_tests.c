@@ -6,10 +6,6 @@
 #include "../src/parsing.c"
 #endif
 
-#ifndef CLIENT_IMPL
-#define CLIENT_IMPL
-#include "../src/client.c"
-#endif
 
 #include "tests.h"
 #include <string.h>

@@ -6,10 +6,6 @@
 #include "../src/parsing.c"
 #endif
 
-#ifndef CLIENT_IMPL
-#define CLIENT_IMPL
-#include "../src/client.c"
-#endif
 
 #include "tests.h"
 #include <string.h>
@@ -36,5 +32,11 @@ int testStrToDecimal() {
     num1 = "12.34";
     converted_num = strToNum(num1, 5);
     T_ASSERT(converted_num * 100 == 1234);
+    return T_SUCCESS;
+}
+int testIntToStr() {
+    int num1 = 123;
+    char* res = intToStr(num1);
+    printf("%s\n", res );
     return T_SUCCESS;
 }
