@@ -10,7 +10,7 @@ valgrind_mode() {
 }
 test_mode() {
     echo "running all of the tests"
-    clang -Wall -Wextra -o tests.out tests/test.c -lncurses -lm -g
+    gcc -g -Wall -Wextra -Wpedantic -o tests.out tests/test.c -lncurses -lm
     ./tests.out
 }
 run_normal() {

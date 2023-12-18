@@ -76,3 +76,11 @@ int csvTypeTest() {
     freeSpreadsheet(client);
     return T_SUCCESS;
 }
+int addMoreCells() {
+    Cellulose client = fromCSV("tests/csvs/single_row.csv");
+    printf("rows before %lu\n", client.spread_sheet.length);
+    clientAddCell(&client, 3, 5);
+    printf("rows %lu\n", client.spread_sheet.length);
+    printf("colums rows %lu\n", client.spread_sheet.elements[5].length);
+    return T_SUCCESS;
+}

@@ -2,12 +2,13 @@
 #include "../client.h"
 #include "../cursor/cursor.h"
 #include "vim_cursor_movement.h"
-static void normalModeParseKey(Cellulose *client, cursor* cursor, int input);
+#include "vim_insert_mode.h"
+
 // parses the key pressed to run the corresponding vim motion
-static void parseVimMotion(Cellulose *client, cursor* cursor, int input) {
+static int parseVimMotion(Cellulose *client, cursor* cursor, str *input_mode_string, int input)  {
     switch (cursor->mode) {
-        case NORMAL_MODE:  normalModeParseKey(client, cursor, input); break;
-        case INSERT_MODE:  break;
-        case COMMAND_MODE:  break;
+        case NORMAL_MODE:  return normalModeParseKey(client, cursor, input_mode_string, input);
+        case INSERT_MODE:  return parseInputEditMode(client, cursor, input, input_mode_string);
+        case COMMAND_MODE:  return -1;
     }
 }

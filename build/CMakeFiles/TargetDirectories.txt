@@ -1,0 +1,3 @@
+/home/ericbruh/Downloads/cellulose/build/CMakeFiles/cellulose.dir
+/home/ericbruh/Downloads/cellulose/build/CMakeFiles/edit_cache.dir
+/home/ericbruh/Downloads/cellulose/build/CMakeFiles/rebuild_cache.dir

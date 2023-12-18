@@ -3,7 +3,7 @@ project(cellulose)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 # the path to a file that includes information on how the spreadsheet should be look, macros, plugins, etc
-set(CONFIG_DIR ../config.h)
+set(CONFIG_DIR config.h)
 
 # use the default a default c compiler path unless it is provided a different one via the CLANG_DIR enviorment variable
 if(EXISTS ${CLANG_DIR})

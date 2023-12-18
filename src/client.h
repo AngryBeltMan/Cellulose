@@ -6,6 +6,8 @@
 #include <string.h>
 #include "cell.h"
 #include "vec.h"
+#include "str.h"
+#include "cursor/cursor_include.h"
 
 #define ELEMENTS client.spread_sheet.elements
 #define ELEMENTS_P client->spread_sheet.elements
@@ -14,6 +16,7 @@
 #define CELL_VAL_P(_y, _x) ELEMENTS_P[_y].elements[_x].cell_value.str
 #define CELL_P(_y, _x) ELEMENTS_P[_y].elements[_x]
 #define CELL(_y, _x) ELEMENTS[_y].elements[_x]
+#define CUR_CELL_P CELL_P(cursor->y, cursor->x)
 #define ROW(_y) ELEMENTS[_y]
 #define ROW_P(_y) ELEMENTS_P[_y]
 #define CLIENT_SHEET_WIDTH 11
@@ -59,6 +62,52 @@ void freeSpreadsheet(Cellulose cellulose) {
 
 
 // checks to see if a certain cell coordinate exists in the spreadsheet
-static bool cellExist(Cellulose *client, size_t x, size_t y) {
+static inline bool cellExist(Cellulose *client, size_t x, size_t y) {
     return (y < SHEET_P.length) ? (x < ROW_P(y).length): false;
+}
+// sets the cell.cell_value
+// used for the function setCell
+static inline void setCellValue(Cellulose *client, cursor* cursor, str* cell_input) {
+    if (isNum(cell_input))
+        CELL_P(cursor->y, cursor->x).cell_type = t_int,
+        CELL_P(cursor->y, cursor->x).cell_value.number = strToNum(cell_input->contents, cell_input->len),
+        // free it here because the client will not be able to
+        free(cell_input->contents);
+    else
+        CELL_P(cursor->y, cursor->x).cell_type = t_str,
+        CELL_P(cursor->y, cursor->x).cell_value.str = cell_input->contents;
+}
+// adds another cell to the spread sheet
+static inline int clientAddCell(Cellulose *client, size_t x, size_t y ) {
+    for (size_t rs = client->spread_sheet.length; rs <= y; ++rs) {
+        row_t r = (row_t)VEC_NEW(cell_t);
+        VEC_APPEND(SHEET_P, r)
+    }
+    for (size_t column = ROW_P(y).length; column <= x; ++column) {
+        char* empty_displayed = malloc(17);
+        strcpy(empty_displayed, "              |");
+        cell_t empty_cell = (cell_t) {
+            .cell_type = t_int,
+            .selected = false,
+            .displayed_value = empty_displayed
+        };
+        VEC_APPEND(ROW_P(y), empty_cell);
+    }
+    return 1;
+}
+// sets the cell at the cursor x and y to the value inside cell_input
+static int setCell(Cellulose *client, cursor* cursor, str* cell_input) {
+    if (!cellExist(client, cursor->x, cursor->y))
+        clientAddCell(client, cursor->x, cursor->y);
+    char* output;
+    // update the display value because the value has changed
+    if ((output = calloc(15,1)) == NULL) return -1;
+    create_cell(output, cell_input->contents, cell_input->len);
+    CELL_P(cursor->y, cursor->x).displayed_value = output;
+    setCellValue(client, cursor, cell_input);
+    // create a new input string
+    str_res res = strNew();
+    if (res.result == -1) return -1;
+    *cell_input = res.string;
+    return 0;
 }

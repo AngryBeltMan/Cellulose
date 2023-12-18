@@ -27,6 +27,9 @@
 // the id for when the cursor is in select mode
 #define MODE_SELECT_ID 9
 
+// the id for displaying the bg and fg of the cursor mode
+#define CURSOR_MODE_ID 10
+
 #define GREY_ID 100
 static void initCellColors() {
     // create new color grey
@@ -46,5 +49,7 @@ static void initCellColors() {
     init_pair(MODE_EDIT_ID, COLOR_BLACK, COLOR_CYAN );
 
     init_pair(MODE_SELECT_ID, COLOR_BLACK, COLOR_CYAN );
+
+    init_pair(CURSOR_MODE_ID, COLOR_WHITE, COLOR_BLACK );
 
 }

@@ -35,8 +35,5 @@ int testStrToDecimal() {
     return T_SUCCESS;
 }
 int testIntToStr() {
-    int num1 = 123;
-    char* res = intToStr(num1);
-    printf("%s\n", res );
     return T_SUCCESS;
 }

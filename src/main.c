@@ -1,5 +1,6 @@
 // displays the spreadsheet using ncurses if defined
 // not defined usually for debugging purposes
+#include "cli/cli_ui.h"
 #define RENDER_TUI
 
 #include <ncurses.h>
@@ -16,8 +17,6 @@
 #include "vec.h"
 
 
-
-
 int main(void) {
 #ifdef RENDER_TUI
     startScreen();
@@ -26,20 +25,22 @@ int main(void) {
     char* cell = malloc(15);
     // user input
     int in = 0x0;
-
-    Cellulose client = fromCSV("../test.csv");
+    Cellulose client = fromCSV("../asl_test.csv");
+    str user_input;
 #ifdef RENDER_TUI
-    renderSpreadsheet(&client, cell);
-    renderCursor(&cursor, &client);
     do {
-        in = getch();
-        parseVimMotion(&client, &cursor, in);
+        if (parseVimMotion(&client, &cursor, &user_input, in) == -1)
+            if (cleanTUI(client))
+                exit(1);
         renderSpreadsheet(&client, cell);
         renderCursor(&cursor, &client);
+        renderCommandLine(&cursor, &user_input);
+        in = getch();
     // exit when the escape key is pressed
     } while (in != 27);
 #endif
     free(cell);
+    free(user_input.contents);
     // if true it means an error has occured deallocating
     if (cleanTUI(client)) { exit(1); }
     exit(0);

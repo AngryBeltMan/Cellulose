@@ -13,7 +13,6 @@ typedef struct {
     enum {
         t_str,
         t_int,
-        t_decimal,
     } cell_type;
     // the value that will be rendered, sometimes different than its actual value especially if the number/string exceeds 12 characters
     char* displayed_value;
@@ -56,16 +55,4 @@ static long double strToNum(char* value, size_t len) {
             converted_value += (value[num_index - 1] - 48) * number_place;
     }
     return converted_value;
-}
-// takes an integer and converts it into a character array on the stack. The value on the stack cannot exceed 10 number places
-static void intToStr(int value, char output[10]) {
-    int num_place = 10;
-    int index = 0;
-    do {
-
-        output[10 - index] = (value % num_place / (num_place/10)) + 48;
-        value -= value % num_place;
-        index += 1;
-        num_place *= 10;
-    } while (value != 0);
 }

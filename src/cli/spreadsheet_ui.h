@@ -6,10 +6,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include "../client.h"
-#ifndef CONFIG_PATH
-#define CONFIG_PATH "../config.h"
-#endif
-#include CONFIG_PATH
+#include "../config_include.h"
 // draws the cells that specify the x and y coordinate of the cells
 // | ||A||B||C| <
 // |1|| || || |

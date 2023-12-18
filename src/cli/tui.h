@@ -1,10 +1,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include "../client.h"
-#ifndef CONFIG_PATH
-#define CONFIG_PATH "../config.h"
-#endif
-#include CONFIG_PATH
+#include "../config_include.h"
 
 // sets up important features needed for rendering the spreadsheet
 static void startScreen() {
