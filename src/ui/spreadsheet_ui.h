@@ -19,9 +19,6 @@ static void drawRowHeader(Cellulose *spreadsheet, char* cell);
 // render a single spreadsheet's row
 static void renderSingleRow(Cellulose *spreadsheet, const size_t row_index);
 
-// checks to see if a cell exists at a given coordinate in the given spreadsheet
-static bool cellExist(Cellulose *spreadsheet, size_t x, size_t y);
-
 // takes in the client and renders its contents
 // the entire client is needed and not just the spreadsheet because there is other info needed
 // like the cursor position

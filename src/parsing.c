@@ -16,7 +16,7 @@ row_t rowEmpty() {
     row_t new_row = VEC_NEW(cell_t);
     return new_row;
 }
-void insertCell(char* value, size_t value_len, size_t max_len, row_t *current_row, bool is_num) {
+void insertCell(char* value, size_t value_len, row_t *current_row, bool is_num) {
     cell_t current_cell;
     char* disp_val = malloc(15);
     create_cell(disp_val, value, value_len);
@@ -59,7 +59,7 @@ Cellulose fromCSV(const char* file_path) {
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
             case ',': {
-                insertCell(value, value_len, value_max, &current_row, is_num);
+                insertCell(value, value_len, &current_row, is_num);
                 value_len = 0;
                 value_max = 6;
                 is_num = true;
@@ -68,7 +68,7 @@ Cellulose fromCSV(const char* file_path) {
                 break;
             }
             case '\n': {
-                insertCell(value, value_len, value_max, &current_row, is_num);
+                insertCell(value, value_len, &current_row, is_num);
                 value_len = 0;
                 value_max = 6;
                 value = calloc(6, 1);

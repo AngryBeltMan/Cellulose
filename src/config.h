@@ -31,6 +31,8 @@
 #define CURSOR_MODE_ID 10
 
 #define GREY_ID 100
+
+#define CURSOR_COORD_FORMATTING "{%u, %u}"
 static void initCellColors() {
     // create new color grey
     init_color(GREY_ID, 750, 750, 750);

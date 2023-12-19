@@ -23,7 +23,7 @@ static void startScreen() {
     initCellColors();
 }
 // deallocates uneeded varibles and exits the TUI if a certain preprossesor is set
-static int cleanTUI(Cellulose client) {
+static int cleanUp(Cellulose client) {
     freeSpreadsheet(client);
 #ifdef RENDER_TUI
     endwin();

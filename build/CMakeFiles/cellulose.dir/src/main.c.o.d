@@ -1,6 +1,6 @@
 CMakeFiles/cellulose.dir/src/main.c.o: \
   /home/ericbruh/Downloads/cellulose/src/main.c \
-  /home/ericbruh/Downloads/cellulose/src/cli/cli_ui.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/cli_ui.h \
   /usr/include/ncurses.h /usr/include/ncurses_dll.h \
   /usr/lib/llvm-14/lib/clang/14.0.0/include/stdint.h \
   /usr/include/stdint.h \
@@ -31,9 +31,9 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
   /usr/lib/llvm-14/lib/clang/14.0.0/include/stdbool.h \
   /usr/include/unctrl.h /usr/include/curses.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/../cursor/cursor_include.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/../cursor/cursor.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/../client.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/../cursor/cursor_include.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/../cursor/cursor.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/../client.h \
   /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/sys/types.h \
@@ -73,18 +73,20 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /home/ericbruh/Downloads/cellulose/src/vec.h /usr/include/assert.h \
   /home/ericbruh/Downloads/cellulose/src/str.h \
   /home/ericbruh/Downloads/cellulose/src/cursor/cursor_include.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/../config_include.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/../config_include.h \
   /home/ericbruh/Downloads/cellulose/src/config.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/../str.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/tui.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/spreadsheet_ui.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/../str.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/tui.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/spreadsheet_ui.h \
   /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
   /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
   /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
-  /home/ericbruh/Downloads/cellulose/src/cli/cursor_ui.h \
+  /home/ericbruh/Downloads/cellulose/src/ui/cursor_ui.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_bindings.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../client.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cursor/cursor.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_normal_mode.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cell.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_cursor_movement.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_insert_mode.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cursor/cursor_include.h \

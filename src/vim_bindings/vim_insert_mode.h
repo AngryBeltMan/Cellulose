@@ -2,7 +2,7 @@
 #include "../client.h"
 #include "../str.h"
 #define DELETE_KEY 127
-static int parseInputEditMode(Cellulose *client, cursor* cursor, int input, str *cell_input) {
+static int inputModeParseKey(Cellulose *client, cursor* cursor, int input, str *cell_input) {
     switch (input) {
         case 10: {
             cursor->mode = NORMAL_MODE;

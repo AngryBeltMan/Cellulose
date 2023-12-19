@@ -1,15 +1,15 @@
 // displays the spreadsheet using ncurses if defined
 // not defined usually for debugging purposes
-#include "cli/cli_ui.h"
+#include "ui/cli_ui.h"
 #define RENDER_TUI
 
 #include <ncurses.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "cli/tui.h"
-#include "cli/spreadsheet_ui.h"
-#include "cli/cursor_ui.h"
+#include "ui/tui.h"
+#include "ui/spreadsheet_ui.h"
+#include "ui/cursor_ui.h"
 #include "vim_bindings/vim_bindings.h"
 
 #include "parsing.h"
@@ -30,7 +30,7 @@ int main(void) {
 #ifdef RENDER_TUI
     do {
         if (parseVimMotion(&client, &cursor, &user_input, in) == -1)
-            if (cleanTUI(client))
+            if (cleanUp(client))
                 exit(1);
         renderSpreadsheet(&client, cell);
         renderCursor(&cursor, &client);
@@ -42,6 +42,6 @@ int main(void) {
     free(cell);
     free(user_input.contents);
     // if true it means an error has occured deallocating
-    if (cleanTUI(client)) { exit(1); }
+    if (cleanUp(client)) { exit(1); }
     exit(0);
 }

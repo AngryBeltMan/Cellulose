@@ -4,6 +4,14 @@
 #include "../client.h"
 #include "../config_include.h"
 #include "../str.h"
+
+static void displayCursorCoordinate(cursor* cursor) {
+    move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH) * 15);
+    printw("                    ");
+    move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH) * 15);
+    printw(CURSOR_COORD_FORMATTING, cursor->x, cursor->y);
+}
+
 static void displayCursorStatus(int cursor_mode) {
     // go to the space below all of the cells
     move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH - 2) * 15);
@@ -26,5 +34,6 @@ static void displayCellInput(str* cell_input, int cursor_mode) {
 }
 static void renderCommandLine(cursor* cursor, str* cell_input) {
     displayCursorStatus(cursor->mode);
+    displayCursorCoordinate(cursor);
     displayCellInput(cell_input, cursor->mode);
 }
