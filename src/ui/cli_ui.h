@@ -5,10 +5,17 @@
 #include "../config_include.h"
 #include "../str.h"
 
-static void displayCursorCoordinate(cursor* cursor) {
+// shows the amount of times the next command will be repeated
+static void displayRepeatCount(int repeat_count) {
     move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH) * 15);
     printw("                    ");
     move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH) * 15);
+    printw("%i", repeat_count);
+}
+static void displayCursorCoordinate(cursor* cursor) {
+    move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH - 1) * 15);
+    printw("                    ");
+    move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH - 1) * 15);
     printw(CURSOR_COORD_FORMATTING, cursor->x, cursor->y);
 }
 
@@ -35,5 +42,6 @@ static void displayCellInput(str* cell_input, int cursor_mode) {
 static void renderCommandLine(cursor* cursor, str* cell_input) {
     displayCursorStatus(cursor->mode);
     displayCursorCoordinate(cursor);
+    displayRepeatCount(cursor->repeat_count);
     displayCellInput(cell_input, cursor->mode);
 }

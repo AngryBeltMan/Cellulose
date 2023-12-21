@@ -41,7 +41,6 @@ Cellulose fromCSV(const char* file_path) {
         exit(1);
     }
 
-
     Cellulose client = newEmpty();
     // the max size
     size_t value_max = 6;

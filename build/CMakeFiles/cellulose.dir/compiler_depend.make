@@ -103,8 +103,9 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
   ../src/vim_bindings/vim_normal_mode.h \
   ../src/cell.h \
   ../src/vim_bindings/vim_cursor_movement.h \
-  ../src/vim_bindings/vim_insert_mode.h \
+  ../src/vim_bindings/command_repeat.h \
   ../src/cursor/cursor_include.h \
+  ../src/vim_bindings/vim_insert_mode.h \
   ../src/str.h \
   ../src/parsing.h \
   ../src/client.h \
@@ -130,6 +131,8 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 /usr/include/x86_64-linux-gnu/bits/errno.h:
 
 /usr/include/errno.h:
+
+../src/vim_bindings/command_repeat.h:
 
 ../src/ui/tui.h:
 

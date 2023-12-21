@@ -28,19 +28,18 @@ typedef struct {
 // value: the value that should be formatted
 static inline void print_cell(int x, int y,char* output, char* value) {
     move(y,x);
-    memset(output, ' ', 12);
-    // escape code at index 13 as to not print out the extra spaces @output could have
-    output[13] = '\0';
+    memset(output, ' ', 10);
+    output[11] = '\0';
     size_t len = strlen(value);
-    memmove(output + 1, value, len < 12 ? len : 12);
-    printw("%s%s|", output,len > 12 ? ".." : "  ");
+    memmove(output + 1, value, len < 11 ? len : 11);
+    printw("%s%s", output,len > 12 ? " .." : "     ");
 }
 // similar to print_cell(), however nothing is printing and the cell is saved to the argument @output
 // used to construct a formatted cell
 static inline void create_cell(char* output, char* value, size_t value_len) {
     memset(output, ' ', 12);
     memcpy(output + 1, value, value_len < 12 ? value_len : 12);
-    memcpy(output + 12, value_len > 12 ? "..|" : "  |", 3);
+    memcpy(output + 12, value_len > 12 ? ".." : "   ", 3);
 }
 #define CURRENT_CHAR value[num_index - 1]
 // converts a string to a floating point value. Used to convert some of the cells into integers while parsing

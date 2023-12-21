@@ -88,8 +88,9 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_normal_mode.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cell.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_cursor_movement.h \
-  /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_insert_mode.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/command_repeat.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cursor/cursor_include.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_insert_mode.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../str.h \
   /home/ericbruh/Downloads/cellulose/src/parsing.h \
   /home/ericbruh/Downloads/cellulose/src/client.h \

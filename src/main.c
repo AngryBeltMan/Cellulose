@@ -25,13 +25,14 @@ int main(void) {
     char* cell = malloc(15);
     // user input
     int in = 0x0;
-    Cellulose client = fromCSV("../asl_test.csv");
+    Cellulose client = fromCSV("../empty.csv");
     str user_input;
 #ifdef RENDER_TUI
     do {
         if (parseVimMotion(&client, &cursor, &user_input, in) == -1)
             if (cleanUp(client))
                 exit(1);
+        drawSpreadsheetDividers();
         renderSpreadsheet(&client, cell);
         renderCursor(&cursor, &client);
         renderCommandLine(&cursor, &user_input);

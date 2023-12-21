@@ -15,6 +15,7 @@
 //  ^
 static void drawColumnHeader(Cellulose *spreadsheet, char* cell);
 static void drawRowHeader(Cellulose *spreadsheet, char* cell);
+static void drawSpreadsheetDividers();
 
 // render a single spreadsheet's row
 static void renderSingleRow(Cellulose *spreadsheet, const size_t row_index);
@@ -72,7 +73,23 @@ static void renderSingleRow(Cellulose *client, const size_t row_index) {
                 attron(COLOR_PAIR(INT_CELL_ID));
             printw("%s", CELL_P(row_index + client->pos_y, column + client->pos_x).displayed_value);
         } else
-            printw("              |");
+            printw("              ");
     }
+}
+static void drawSpreadsheetDividers() {
+
+    // draws the dividers for the the column number line
+    // it is its own seperate loop because the column number line usually has its own background
+    attron(COLOR_PAIR(COLUMN_CELL_ID));
+    for (int column = 2; column <= CLIENT_SHEET_WIDTH; ++column)
+        move(0, column * 15),
+        printw("|");
+
+    attron(COLOR_PAIR(STR_CELL_ID));
+    for (int row = 1; row <= CLIENT_SHEET_HEIGHT; ++row)
+        for (int column = 2; column <= CLIENT_SHEET_WIDTH; ++column) {
+            move(row, (column * 15) - 1);
+            printw("|");
+        }
 }
 

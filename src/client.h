@@ -12,6 +12,8 @@
 #define ELEMENTS client.spread_sheet.elements
 #define ELEMENTS_P client->spread_sheet.elements
 #define SHEET_P client->spread_sheet
+#define SHEET_LEN client->spread_sheet.length
+
 #define CELL_VAL(_y, _x) ELEMENTS[_y].elements[_x].cell_value.str
 #define CELL_VAL_P(_y, _x) ELEMENTS_P[_y].elements[_x].cell_value.str
 #define CELL_P(_y, _x) ELEMENTS_P[_y].elements[_x]
@@ -77,28 +79,34 @@ static inline void setCellValue(Cellulose *client, cursor* cursor, str* cell_inp
         CELL_P(cursor->y, cursor->x).cell_type = t_str,
         CELL_P(cursor->y, cursor->x).cell_value.str = cell_input->contents;
 }
-// adds another cell to the spread sheet
-static inline int clientAddCell(Cellulose *client, size_t x, size_t y ) {
+// Adds rows to the spreadsheet until the number of rows is equal to the argument y. Creates no rows if the number of rows is equal to or greater than y.
+static inline void createRowsTo(Cellulose *client, size_t y) {
     for (size_t rs = client->spread_sheet.length; rs <= y; ++rs) {
         row_t r = (row_t)VEC_NEW(cell_t);
         VEC_APPEND(SHEET_P, r)
     }
-    for (size_t column = ROW_P(y).length; column <= x; ++column) {
-        char* empty_displayed = malloc(17);
+}
+// Adds columns to a certain row until the number of columns in that row is equal to the argument x. Creates no columns if the number of columns in the row is equal to or greater than x.
+static inline int createColumnsTo(Cellulose *client, size_t row_index, size_t x) {
+    for (size_t column = ROW_P(row_index).length; column <= x; ++column) {
+        char* empty_displayed;
+        if ((empty_displayed = malloc(17)) == NULL)
+            return -1;
         strcpy(empty_displayed, "              |");
         cell_t empty_cell = (cell_t) {
             .cell_type = t_int,
             .selected = false,
             .displayed_value = empty_displayed
         };
-        VEC_APPEND(ROW_P(y), empty_cell);
+        VEC_APPEND(ROW_P(row_index), empty_cell);
     }
-    return 1;
+    return 0;
 }
 // sets the cell at the cursor x and y to the value inside cell_input
 static int setCell(Cellulose *client, cursor* cursor, str* cell_input) {
     if (!cellExist(client, cursor->x, cursor->y))
-        clientAddCell(client, cursor->x, cursor->y);
+        createRowsTo(client, cursor->y),
+        createColumnsTo(client, cursor->y, cursor->x);
     char* output;
     // update the display value because the value has changed
     if ((output = calloc(15,1)) == NULL) return -1;
