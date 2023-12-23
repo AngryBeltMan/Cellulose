@@ -13,81 +13,107 @@
 // |2| || || |
 // |3|| || || |
 //  ^
-static void drawColumnHeader(Cellulose *spreadsheet, char* cell);
-static void drawRowHeader(Cellulose *spreadsheet, char* cell);
-static void drawSpreadsheetDividers();
+static void drawColumnHeader(Cellulose *spreadsheet);
+static void drawRowHeader(Cellulose *spreadsheet);
+static void drawSpreadsheetDividers(bool *redraw);
+static inline void renderSingleCell(Cellulose* client, cursor* cursor, const size_t x, const size_t y);
 
 // render a single spreadsheet's row
-static void renderSingleRow(Cellulose *spreadsheet, const size_t row_index);
+static void renderSingleRow(Cellulose *spreadsheet, cursor* cursor, const size_t row_index);
 
 // takes in the client and renders its contents
 // the entire client is needed and not just the spreadsheet because there is other info needed
 // like the cursor position
-static void renderSpreadsheet(Cellulose *client, char* row_cell) {
+static void renderSpreadsheet(Cellulose *client, cursor* cursor) {
+    if (!client->redraw_spreadsheet)
+        return;
+    client->redraw_spreadsheet = false;
     // draws the row and column header
     attron(COLOR_PAIR(COLUMN_CELL_ID));
-    drawColumnHeader(client, row_cell);
+    drawColumnHeader(client);
     attron(COLOR_PAIR(ROW_CELL_ID));
-    drawRowHeader(client, row_cell);
+    drawRowHeader(client);
     move(0,0);
     // the fill for the block at (0,0)
     attron(COLOR_PAIR(STR_CELL_ID));
-    printw("               ");
+    printw(EMPTY_CELL_FULL);
     // iterates over all of the rows, then renders each of the rows cells
     for (size_t rows = 0; rows < CLIENT_SHEET_HEIGHT; ++rows )
-        renderSingleRow(client, rows);
+        renderSingleRow(client, cursor, rows);
 
 }
 
-static void drawColumnHeader(Cellulose *spreadsheet, char* cell) {
-    char* column_number = malloc(7);
-    assert(column_number && "ERROR: failed to malloc on function drawColumnHeader");
-    for (int column = 0; column < CLIENT_SHEET_WIDTH; ++column) {
-        memset(column_number, 0x0, 7);
-        snprintf(column_number, 7, "%i", column + spreadsheet->pos_x);
-        print_cell((column + 1) * 15, 0, cell, column_number);
-    }
-    free(column_number);
-
-}
-static void drawRowHeader(Cellulose *spreadsheet, char* cell) {
-    char* row_number = malloc(7);
-    assert(row_number && "ERROR: failed to malloc on function drawColumnHeader");
-    for (int row = 0; row < CLIENT_SHEET_HEIGHT; ++row) {
-        memset(row_number, 0x0, 7);
-        snprintf(row_number, 7, "%i", row + spreadsheet->pos_y);
-        print_cell(0, row + 1, cell, row_number );
-    }
-    free(row_number);
-}
-static void renderSingleRow(Cellulose *client, const size_t row_index) {
-    for (size_t column = 0; column < CLIENT_SHEET_WIDTH; ++column) {
-        // this moves where the text should be shown on the TUI
-        move(row_index + 1,(column + 1) * 15);
-        if (cellExist(client,  column + client->pos_x, row_index + client->pos_y)) {
-            // this checks the cell's value's type which changes how the cell looks depending on the type
-            // formatting can be found in config.h
-            if (CELL_P(row_index + client->pos_y, column + client->pos_x).cell_type == t_str)
-                attron(COLOR_PAIR(STR_CELL_ID));
-            else
-                attron(COLOR_PAIR(INT_CELL_ID));
-            printw("%s", CELL_P(row_index + client->pos_y, column + client->pos_x).displayed_value);
-        } else
-            printw("              ");
-    }
-}
-static void drawSpreadsheetDividers() {
-
-    // draws the dividers for the the column number line
-    // it is its own seperate loop because the column number line usually has its own background
+static void drawColumnHeader(Cellulose *spreadsheet) {
+    // clear the column of its original values
+    move(0,0);
     attron(COLOR_PAIR(COLUMN_CELL_ID));
-    for (int column = 2; column <= CLIENT_SHEET_WIDTH; ++column)
-        move(0, column * 15),
-        printw("|");
+    printw(COLUMN_HEADER_BG);
+    for (int column = 0; column <= CLIENT_SHEET_WIDTH; ++column) {
+        move(0, (column * 15) + 6);
+        printw("%i", column + spreadsheet->pos_x);
+    }
 
+}
+static void drawRowHeader(Cellulose *spreadsheet) {
+    int row;
+    // sets the background for all of the row header cells
+    for (row = 0; row <= CLIENT_SHEET_HEIGHT; ++row) {
+        move(row, 0);
+        printw(EMPTY_CELL_FULL);
+    }
+    for (row = 0; row <= CLIENT_SHEET_HEIGHT; ++row) {
+        // three is the right offset
+        move(row, 3);
+        printw("%i", row + spreadsheet->pos_y);
+    }
+}
+// see if the cell is being selected by the user in visual mode
+static bool isCellSelected(cursor* cursor, size_t cell_x, size_t cell_y) {
+    switch (cursor->visual_state) {
+        case visual_state_NONE:
+            return false;
+        case visual_state_FREE_POINT:
+            return (((cell_y < cursor->select_pos_y) + (cell_y > cursor->y) == (cursor->select_pos_y > cursor->y) * 2) &&
+                ((cell_x < cursor->select_pos_x) + (cell_x > cursor->x) == (cursor->select_pos_x > cursor->x) * 2));
+        case visual_state_ROW_SELECT:
+            return (cell_y < cursor->select_pos_y) + (cell_y > cursor->y) == ((cursor->select_pos_y > cursor->y) * 2);
+        case visual_state_COLUMN_SELECT:
+            return (cell_x < cursor->select_pos_x) + (cell_x > cursor->x) == (cursor->select_pos_x > cursor->x) * 2;
+    }
+}
+
+static void renderSingleRow(Cellulose *client, cursor* cursor, const size_t row_index) {
+    for (size_t column = 0; column < CLIENT_SHEET_WIDTH; ++column)
+        renderSingleCell(client, cursor, column, row_index);
+}
+
+static inline void renderSingleCell(Cellulose* client, cursor* cursor, const size_t x, const size_t y) {
+    // move where the text should be shown on the TUI
+    move(y + 1,(x + 1) * 15);
+    attron(COLOR_PAIR(STR_CELL_ID));
+    if (cellExist(client,  x + client->pos_x, y + client->pos_y)) {
+        // this checks the cell's value's type which changes how the cell looks depending on the type
+        // formatting can be found in config.h
+        if (CELL_P(y + client->pos_y, x + client->pos_x).cell_type == t_int)
+            attron(COLOR_PAIR(INT_CELL_ID));
+        if (isCellSelected(cursor, x + client->pos_x, y + client->pos_y))
+            attron(COLOR_PAIR(SELECTED_CELL_ID));
+        printw("%s", CELL_P(y + client->pos_y, x + client->pos_x).displayed_value);
+    } else {
+        if (isCellSelected(cursor, x + client->pos_x, y + client->pos_y))
+            attron(COLOR_PAIR(SELECTED_CELL_ID));
+        printw(EMPTY_CELL);
+    }
+
+}
+
+static void drawSpreadsheetDividers(bool *redraw) {
+    if (!*redraw)
+        return;
+    *redraw = false;
     attron(COLOR_PAIR(STR_CELL_ID));
     for (int row = 1; row <= CLIENT_SHEET_HEIGHT; ++row)
-        for (int column = 2; column <= CLIENT_SHEET_WIDTH; ++column) {
+        for (int column = 2; column <= CLIENT_SHEET_WIDTH + 1; ++column) {
             move(row, (column * 15) - 1);
             printw("|");
         }

@@ -22,27 +22,22 @@ int main(void) {
     startScreen();
 #endif
     cursor cursor = initCursor();
-    char* cell = malloc(15);
     // user input
     int in = 0x0;
-    Cellulose client = fromCSV("../empty.csv");
+    Cellulose client = fromCSV("../test.csv");
     str user_input;
 #ifdef RENDER_TUI
     do {
         if (parseVimMotion(&client, &cursor, &user_input, in) == -1)
-            if (cleanUp(client))
-                exit(1);
-        drawSpreadsheetDividers();
-        renderSpreadsheet(&client, cell);
+            exit(cleanUp(client));
+        drawSpreadsheetDividers(&client.redraw_dividers);
+        renderSpreadsheet(&client, &cursor);
         renderCursor(&cursor, &client);
         renderCommandLine(&cursor, &user_input);
         in = getch();
     // exit when the escape key is pressed
     } while (in != 27);
 #endif
-    free(cell);
     free(user_input.contents);
-    // if true it means an error has occured deallocating
-    if (cleanUp(client)) { exit(1); }
-    exit(0);
+    exit(cleanUp(client));
 }

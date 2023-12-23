@@ -16,8 +16,6 @@ typedef struct {
     } cell_type;
     // the value that will be rendered, sometimes different than its actual value especially if the number/string exceeds 12 characters
     char* displayed_value;
-    // a boolean value to check if the elementent is being selected
-    bool selected;
 } cell_t;
 
 // prints a single spread sheet cell
@@ -39,7 +37,7 @@ static inline void print_cell(int x, int y,char* output, char* value) {
 static inline void create_cell(char* output, char* value, size_t value_len) {
     memset(output, ' ', 12);
     memcpy(output + 1, value, value_len < 12 ? value_len : 12);
-    memcpy(output + 12, value_len > 12 ? ".." : "   ", 3);
+    memcpy(output + 12, value_len > 12 ? ".." : "  ", 3);
 }
 #define CURRENT_CHAR value[num_index - 1]
 // converts a string to a floating point value. Used to convert some of the cells into integers while parsing

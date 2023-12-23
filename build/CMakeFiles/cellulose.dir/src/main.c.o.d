@@ -62,8 +62,11 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /usr/include/string.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
-  /usr/include/strings.h /home/ericbruh/Downloads/cellulose/src/cell.h \
-  /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/strings.h \
+  /home/ericbruh/Downloads/cellulose/src/config_include.h \
+  /home/ericbruh/Downloads/cellulose/src/config.h \
+  /home/ericbruh/Downloads/cellulose/src/cell.h /usr/include/math.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
   /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
   /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
   /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
@@ -74,7 +77,6 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /home/ericbruh/Downloads/cellulose/src/str.h \
   /home/ericbruh/Downloads/cellulose/src/cursor/cursor_include.h \
   /home/ericbruh/Downloads/cellulose/src/ui/../config_include.h \
-  /home/ericbruh/Downloads/cellulose/src/config.h \
   /home/ericbruh/Downloads/cellulose/src/ui/../str.h \
   /home/ericbruh/Downloads/cellulose/src/ui/tui.h \
   /home/ericbruh/Downloads/cellulose/src/ui/spreadsheet_ui.h \
@@ -88,6 +90,7 @@ CMakeFiles/cellulose.dir/src/main.c.o: \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_normal_mode.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cell.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_cursor_movement.h \
+  /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_visual_transitions.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/command_repeat.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/../cursor/cursor_include.h \
   /home/ericbruh/Downloads/cellulose/src/vim_bindings/vim_insert_mode.h \

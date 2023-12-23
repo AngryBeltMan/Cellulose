@@ -31,11 +31,22 @@
 #define CURSOR_MODE_ID 10
 
 #define GREY_ID 100
+#define PURPLE_ID 101
+
+#define EMPTY_CELL "              "
+
+#define EMPTY_CELL_FULL "               "
+#define CELL_LEN 14
+
+#define COLUMN_HEADER_BG "                                                                                                                                                                                    "
 
 #define CURSOR_COORD_FORMATTING "{%u, %u}"
 static void initCellColors() {
     // create new color grey
     init_color(GREY_ID, 750, 750, 750);
+
+    // create new color grey
+    init_color(PURPLE_ID, 550, 50, 450);
 
     // arg 1 foreground arg2 background
     init_pair(STR_CELL_ID, COLOR_BLACK, GREY_ID );
@@ -50,7 +61,7 @@ static void initCellColors() {
 
     init_pair(MODE_EDIT_ID, COLOR_BLACK, COLOR_CYAN );
 
-    init_pair(MODE_SELECT_ID, COLOR_BLACK, COLOR_CYAN );
+    init_pair(SELECTED_CELL_ID, COLOR_WHITE, PURPLE_ID );
 
     init_pair(CURSOR_MODE_ID, COLOR_WHITE, COLOR_BLACK );
 

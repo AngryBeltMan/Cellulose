@@ -7,7 +7,15 @@ typedef struct {
 
     // the coordinates of the cursor
     unsigned short select_pos_x,select_pos_y;
-    bool select_mode;
+    // This mode is used to select multiple cells
+
+    // The different states visual mode may have.
+    enum {
+        visual_state_NONE = 0,
+        visual_state_FREE_POINT = 1,
+        visual_state_ROW_SELECT = 2,
+        visual_state_COLUMN_SELECT = 3,
+    } visual_state;
 
     // holds the previous char pressed
     char previous_char;
@@ -23,8 +31,6 @@ typedef struct {
         NORMAL_MODE,
         // This mode is used to type out commands
         COMMAND_MODE,
-        // This mode is used to select multiple cells
-        VISUAL_MODE
     } mode;
 } cursor;
 
@@ -33,8 +39,8 @@ static cursor initCursor() {
     return (cursor){
         .x = 0,
         .y = 0,
-        .select_mode = false,
         .mode = NORMAL_MODE,
+        .visual_state = visual_state_NONE,
         .previous_char = '\0'
     };
 }

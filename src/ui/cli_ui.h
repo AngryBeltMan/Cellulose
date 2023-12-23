@@ -18,18 +18,20 @@ static void displayCursorCoordinate(cursor* cursor) {
     move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH - 1) * 15);
     printw(CURSOR_COORD_FORMATTING, cursor->x, cursor->y);
 }
+#define DISPLAY_CURSOR_STATUS(_status)\
+    case _status:\
+        printw("%s", #_status);\
+        break;
+
 
 static void displayCursorStatus(int cursor_mode) {
     // go to the space below all of the cells
     move(CLIENT_SHEET_HEIGHT + 1, (CLIENT_SHEET_WIDTH - 2) * 15);
     attron(COLOR_PAIR(CURSOR_MODE_ID));
     switch (cursor_mode) {
-        case INSERT_MODE:
-            printw("EDIT MODE  ");
-            break;
-        case NORMAL_MODE:
-            printw("NORMAL MODE");
-            break;
+        DISPLAY_CURSOR_STATUS(NORMAL_MODE)
+        DISPLAY_CURSOR_STATUS(INSERT_MODE)
+        DISPLAY_CURSOR_STATUS(COMMAND_MODE)
     }
 }
 static void displayCellInput(str* cell_input, int cursor_mode) {

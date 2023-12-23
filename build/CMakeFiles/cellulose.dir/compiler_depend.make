@@ -72,6 +72,8 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/strings.h \
+  ../src/config_include.h \
+  ../src/config.h \
   ../src/cell.h \
   /usr/include/math.h \
   /usr/include/x86_64-linux-gnu/bits/math-vector.h \
@@ -86,7 +88,6 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
   ../src/str.h \
   ../src/cursor/cursor_include.h \
   ../src/config_include.h \
-  ../src/config.h \
   ../src/str.h \
   ../src/ui/tui.h \
   ../src/ui/spreadsheet_ui.h \
@@ -103,6 +104,7 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
   ../src/vim_bindings/vim_normal_mode.h \
   ../src/cell.h \
   ../src/vim_bindings/vim_cursor_movement.h \
+  ../src/vim_bindings/vim_visual_transitions.h \
   ../src/vim_bindings/command_repeat.h \
   ../src/cursor/cursor_include.h \
   ../src/vim_bindings/vim_insert_mode.h \
@@ -136,10 +138,6 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 
 ../src/ui/tui.h:
 
-../src/config.h:
-
-../src/config_include.h:
-
 ../src/str.h:
 
 /usr/include/assert.h:
@@ -153,6 +151,10 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
 /usr/include/math.h:
+
+../src/config.h:
+
+../src/config_include.h:
 
 /usr/include/strings.h:
 
@@ -299,6 +301,8 @@ CMakeFiles/cellulose.dir/src/main.c.o: ../src/main.c \
 /usr/include/endian.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
+
+../src/vim_bindings/vim_visual_transitions.h:
 
 /usr/include/string.h:
 

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <string.h>
+#include "config_include.h"
 #include "cell.h"
 #include "vec.h"
 #include "str.h"
@@ -32,6 +33,8 @@ typedef struct {
     uint16_t pos_x,pos_y;
     // the spreadsheet
     spreadsheet_t spread_sheet;
+    // when true the corresponding elements will be redrawn
+    bool redraw_dividers, redraw_spreadsheet;
 } Cellulose;
 
 
@@ -40,6 +43,8 @@ static Cellulose newEmpty() {
     Cellulose cell;
     cell.pos_x = 0;
     cell.pos_y = 0;
+    cell.redraw_dividers = true;
+    cell.redraw_spreadsheet = true;
     cell.spread_sheet = (spreadsheet_t)VEC_NEW(row_t);
     assert(cell.spread_sheet.elements && "ERROR: failed to allocate memory for cellulose vector");
     return cell;
@@ -61,7 +66,6 @@ void freeSpreadsheet(Cellulose cellulose) {
     }
     VEC_FREE(cellulose.spread_sheet);
 }
-
 
 // checks to see if a certain cell coordinate exists in the spreadsheet
 static inline bool cellExist(Cellulose *client, size_t x, size_t y) {
@@ -90,12 +94,11 @@ static inline void createRowsTo(Cellulose *client, size_t y) {
 static inline int createColumnsTo(Cellulose *client, size_t row_index, size_t x) {
     for (size_t column = ROW_P(row_index).length; column <= x; ++column) {
         char* empty_displayed;
-        if ((empty_displayed = malloc(17)) == NULL)
+        if ((empty_displayed = malloc(CELL_LEN)) == NULL)
             return -1;
-        strcpy(empty_displayed, "              |");
+        strcpy(empty_displayed, EMPTY_CELL);
         cell_t empty_cell = (cell_t) {
             .cell_type = t_int,
-            .selected = false,
             .displayed_value = empty_displayed
         };
         VEC_APPEND(ROW_P(row_index), empty_cell);

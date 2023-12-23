@@ -2,16 +2,14 @@
 #include "../cursor/cursor.h"
 #include <ncurses.h>
 #define MOVE_AMOUNT (cursor->repeat_count + (cursor->repeat_count == 0))
-// calculate how much a cursor can move given an input that garentee that no underflow occurs
-#define CALC_MOVEMENT(_amount, _cur_pos) (_amount - ((_amount + _cur_pos) * ((int)(_cur_pos + _amount) < 0)))
 #define MOVE_CURSOR(_cursor_amount, _client_x_amount, _client_y_amount, _cond, _cur_attr) \
     /*                                     \/- used to prevent underflows*/\
     client->redraw_spreadsheet = (cursor->visual_state != visual_state_NONE);   \
-    cursor->_cur_attr += CALC_MOVEMENT(_cursor_amount, cursor->_cur_attr); \
+    cursor->_cur_attr += _cursor_amount - ((_cursor_amount + cursor->_cur_attr) * ((int)(cursor->_cur_attr + _cursor_amount) < 0)); \
     if (_cond) { \
         client->redraw_spreadsheet = true; \
-        client->pos_x += CALC_MOVEMENT(_client_x_amount, client->pos_x); \
-        client->pos_y += CALC_MOVEMENT(_client_y_amount, client->pos_y); \
+        client->pos_x += _client_x_amount; \
+        client->pos_y += _client_y_amount; \
     } else \
         renderSingleCell(client, cursor, (cursor->x - _client_x_amount) - client->pos_x, (cursor->y - _client_y_amount) -  client->pos_y);\
     cursor->repeat_count = 0; break;
@@ -32,13 +30,11 @@ static int touchingLeftEdge(Cellulose *client, int x) {
 static void gotoTop(Cellulose *client, cursor* cursor) {
     if (cursor->previous_char != 'g')
         return;
-    client->redraw_spreadsheet = true;
     client->pos_y = 0;
     cursor->y = 0;
 }
 
 static void gotoBottom(Cellulose *client, cursor* cursor) {
-    client->redraw_spreadsheet = true;
     client->pos_y = (SHEET_LEN - CLIENT_SHEET_HEIGHT) * (SHEET_LEN > CLIENT_SHEET_HEIGHT);
     cursor->y = SHEET_LEN - (SHEET_LEN != 0);
 }

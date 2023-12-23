@@ -29,7 +29,6 @@ void insertCell(char* value, size_t value_len, row_t *current_row, bool is_num) 
     else
         current_cell.cell_value.str = value,
         current_cell.cell_type = t_str;
-    current_cell.selected = false;
     VEC_APPEND((*current_row), current_cell);
 }
 
