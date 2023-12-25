@@ -38,6 +38,5 @@ int main(void) {
     // exit when the escape key is pressed
     } while (in != 27);
 #endif
-    free(user_input.contents);
     exit(cleanUp(client));
 }

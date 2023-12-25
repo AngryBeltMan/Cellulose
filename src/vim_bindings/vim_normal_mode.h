@@ -3,7 +3,16 @@
 #include "vim_cursor_movement.h"
 #include "vim_visual_transitions.h"
 #include "command_repeat.h"
+#include <string.h>
 static str_res cellValueAsStr(Cellulose* client, cursor* cursor );
+static int name(Cellulose *client,unsigned short x, unsigned short y, bool exist, void* arg) {
+    if (!exist) {
+        createRowsTo(client, y);
+        createColumnsTo(client, y, x);
+    }
+    strcpy(CELL_P(y,x).displayed_value, " hey          ");
+    return 0;
+}
 // parses the key input in normal mode
 static int normalModeParseKey(Cellulose* client, cursor* cursor, str* cell_input, int input) {
     switch (input) {
@@ -15,7 +24,6 @@ static int normalModeParseKey(Cellulose* client, cursor* cursor, str* cell_input
             // we clear the screen so we must redraw everything that was cleared
             client->redraw_dividers = true;
             client->redraw_spreadsheet = true;
-            cursor->visual_state = visual_state_NONE;
             // clear the previous items on the screen
             clear();
             str_res res;
@@ -25,7 +33,6 @@ static int normalModeParseKey(Cellulose* client, cursor* cursor, str* cell_input
         } break;
         case 'a': {
             cursor->mode = INSERT_MODE;
-            cursor->visual_state = visual_state_NONE;
             client->redraw_dividers = true;
             client->redraw_spreadsheet = true;
             clear();
@@ -33,6 +40,11 @@ static int normalModeParseKey(Cellulose* client, cursor* cursor, str* cell_input
             if (( res = cellValueAsStr(client, cursor)).result == -1)
                 return -1;
             *cell_input = res.string;
+        } break;
+        case 'b': {
+            iterSelectedCells(client, cursor, &name, NULL);
+            client->redraw_spreadsheet = true;
+            cursor->visual_state = visual_state_NONE;
         } break;
     }
     // input will be between 0 to 255 so there should be no undefined behavior

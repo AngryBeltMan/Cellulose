@@ -6,7 +6,7 @@ cmake_build() {
 valgrind_mode() {
     cmake_build
     echo "running using valgrind"
-    valgrind ./cellulose
+    valgrind --leak-check=full ./cellulose
 }
 test_mode() {
     echo "running all of the tests"

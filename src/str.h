@@ -51,6 +51,15 @@ static str_res fromCharArray(char* value) {
     strcpy(str.contents, value);
     return (str_res) {.string = str, .result = 0};
 }
+
+static str_res strClone(str* string) {
+    str new_string = { .len = string->len, .max_len = string->max_len};
+    if ((new_string.contents = calloc(string->max_len, 1)) == NULL)
+        return (str_res) {.result = -1};
+    strcpy(new_string.contents, string->contents);
+    return (str_res) {.string = new_string, .result = 0};
+}
+
 // return a str with its contents holding value as a char array
 // doesn't currently work with floating point numbers
 static str_res fromDouble(long double value) {
