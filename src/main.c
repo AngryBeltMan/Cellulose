@@ -1,7 +1,8 @@
 // displays the spreadsheet using ncurses if defined
 // not defined usually for debugging purposes
-#include "ui/cli_ui.h"
 #define RENDER_TUI
+
+#include "ui/cli_ui.h"
 
 #include <ncurses.h>
 #include <stdlib.h>
@@ -17,16 +18,22 @@
 #include "vec.h"
 
 
-int main(void) {
-#ifdef RENDER_TUI
-    startScreen();
-#endif
+int main(int argc, char **argv) {
+    if (argc == 1)
+        printf("Cellulose; a spreadsheet editor with vim-like bindings.\nTo begin provide a path to a file to begin editing the file.\n"),
+        exit(0);
     cursor cursor = initCursor();
     // user input
     int in = 0x0;
-    Cellulose client = fromCSV("../test.csv");
+    Cellulose client = newEmpty();
+    int parsing_res = fromCSV(&client, argv[1]);
+    if (parsing_res) {
+        printf("ERROR: failed to parse/open input file.\n");
+        exit(1);
+    }
     str user_input;
 #ifdef RENDER_TUI
+    startScreen();
     do {
         if (parseVimMotion(&client, &cursor, &user_input, in) == -1)
             exit(cleanUp(client));

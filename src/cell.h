@@ -13,11 +13,19 @@ typedef struct {
     enum {
         t_str,
         t_int,
+        t_empty,
     } cell_type;
     // the value that will be rendered, sometimes different than its actual value especially if the number/string exceeds 12 characters
     char* displayed_value;
 } cell_t;
 
+static inline void freeCell(cell_t cell) {
+    if (cell.cell_type == t_empty)
+        return;
+    free(cell.displayed_value);
+    if (cell.cell_type == t_str)
+        free(cell.cell_value.str);
+}
 // prints a single spread sheet cell
 // args:
 // x: x position of the cell

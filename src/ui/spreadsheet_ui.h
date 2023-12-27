@@ -68,7 +68,7 @@ static void drawRowHeader(Cellulose *spreadsheet) {
     }
 }
 // see if the cell is being selected by the user in visual mode
-static bool isCellSelected(cursor* cursor, size_t cell_x, size_t cell_y) {
+static bool isCellSelected(Cellulose *client, cursor* cursor, size_t cell_x, size_t cell_y) {
     switch (cursor->visual_state) {
         case visual_state_NONE:
             return false;
@@ -76,7 +76,11 @@ static bool isCellSelected(cursor* cursor, size_t cell_x, size_t cell_y) {
             return (((cell_y < cursor->select_pos_y) + (cell_y > cursor->y) == (cursor->select_pos_y > cursor->y) * 2) &&
                 ((cell_x < cursor->select_pos_x) + (cell_x > cursor->x) == (cursor->select_pos_x > cursor->x) * 2));
         case visual_state_ROW_SELECT:
-            return (cell_y < cursor->select_pos_y) + (cell_y > cursor->y) == ((cursor->select_pos_y > cursor->y) * 2);
+            // This is seperate from the return statement because we needs to make sure a row exists at index cell_y as the rhs of the && statement indexs the spreadsheet for that row.
+            // TLDR: this if statement is sperate from the return statement else it would cause a segfault.
+            if (!rowExist(cell_y))
+                return false;
+            return (cell_y < cursor->select_pos_y) + (cell_y > cursor->y) == ((cursor->select_pos_y > cursor->y) * 2) && (ROW_P(cell_y).length > cell_x);
         case visual_state_COLUMN_SELECT:
             return (cell_x < cursor->select_pos_x) + (cell_x > cursor->x) == (cursor->select_pos_x > cursor->x) * 2;
     }
@@ -91,20 +95,22 @@ static inline void renderSingleCell(Cellulose* client, cursor* cursor, const siz
     // move where the text should be shown on the TUI
     move(y + 1,(x + 1) * 15);
     attron(COLOR_PAIR(STR_CELL_ID));
-    if (cellExist(client,  x + client->pos_x, y + client->pos_y)) {
-        // this checks the cell's value's type which changes how the cell looks depending on the type
-        // formatting can be found in config.h
-        if (CELL_P(y + client->pos_y, x + client->pos_x).cell_type == t_int)
-            attron(COLOR_PAIR(INT_CELL_ID));
-        if (isCellSelected(cursor, x + client->pos_x, y + client->pos_y))
-            attron(COLOR_PAIR(SELECTED_CELL_ID));
-        printw("%s", CELL_P(y + client->pos_y, x + client->pos_x).displayed_value);
-    } else {
-        if (isCellSelected(cursor, x + client->pos_x, y + client->pos_y))
-            attron(COLOR_PAIR(SELECTED_CELL_ID));
-        printw(EMPTY_CELL);
-    }
-
+    // The second conditional will not segfault because of an index out of bounds because if a cell didn't exist it will just jump to draw_empty_celland not evaluate the other conditional.
+    // This may later become an issue when compiler optimizations are enabled.
+    if (!cellExist(client,  x + client->pos_x, y + client->pos_y) || CELL_P(client->pos_y + y, client->pos_x + x).cell_type == t_empty)
+        goto draw_empty_cell;
+    // this checks the cell's value's type which changes how the cell looks depending on the type
+    // formatting can be found in config.h
+    if (CELL_P(y + client->pos_y, x + client->pos_x).cell_type == t_int)
+        attron(COLOR_PAIR(INT_CELL_ID));
+    if (isCellSelected(client, cursor, x + client->pos_x, y + client->pos_y))
+        attron(COLOR_PAIR(SELECTED_CELL_ID));
+    printw("%s", CELL_P(y + client->pos_y, x + client->pos_x).displayed_value);
+    return;
+draw_empty_cell:
+    if (isCellSelected(client, cursor, x + client->pos_x, y + client->pos_y))
+        attron(COLOR_PAIR(SELECTED_CELL_ID));
+    printw(EMPTY_CELL);
 }
 
 static void drawSpreadsheetDividers(bool *redraw) {

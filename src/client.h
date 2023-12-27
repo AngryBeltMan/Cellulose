@@ -16,6 +16,8 @@
 #define SHEET_P client->spread_sheet
 #define SHEET_LEN client->spread_sheet.length
 
+#define rowExist(_y) (_y < SHEET_P.length)
+
 #define CELL_VAL(_y, _x) ELEMENTS[_y].elements[_x].cell_value.str
 #define CELL_VAL_P(_y, _x) ELEMENTS_P[_y].elements[_x].cell_value.str
 #define CELL_P(_y, _x) ELEMENTS_P[_y].elements[_x]
@@ -52,10 +54,9 @@ static Cellulose newEmpty() {
     assert(cell.spread_sheet.elements && "ERROR: failed to allocate memory for cellulose vector");
     return cell;
 }
-
 // checks to see if a certain cell coordinate exists in the spreadsheet
 static inline bool cellExist(Cellulose *client, size_t x, size_t y) {
-    return (y < SHEET_P.length) ? (x < ROW_P(y).length): false;
+    return  rowExist(y) ? (x < ROW_P(y).length): false;
 }
 
 // writes to a given file with arg seperator seperating each value
@@ -67,8 +68,7 @@ void freeSpreadsheet(Cellulose cellulose) {
     VEC_ITER(cellulose.spread_sheet, row_t, sheet_row) {
         // iterates all of the cells in the row
         VEC_ITER(sheet_row, cell_t, row_cell) {
-            if (row_cell.cell_type == t_str) free(row_cell.cell_value.str);
-            free(row_cell.displayed_value);
+            freeCell(row_cell);
         }
         VEC_FREE(sheet_row); // frees the pointer to the rows
     }
@@ -78,15 +78,22 @@ void freeSpreadsheet(Cellulose cellulose) {
 // Function pointer should take two args the first being the x coordinate of the cell, the y coordingate of the cell, and finally a boolean that specifies if that cell exists in the spreadsheet.
 // Finally, the function pointer should return an integer with zero indicating a success.
 static int iterSelectedCells(Cellulose* client, cursor* cursor, void* fn, void* fn_arg) {
-    unsigned short min_y = (cursor->select_pos_y < cursor->y) ? cursor->select_pos_y : cursor->y;
-    unsigned short max_y = (cursor->select_pos_y > cursor->y) ? cursor->select_pos_y : cursor->y;
-    unsigned short min_x = (cursor->select_pos_x < cursor->x) ? cursor->select_pos_x : cursor->x;
-    unsigned short max_x = (cursor->select_pos_x > cursor->x) ? cursor->select_pos_x : cursor->x;
+    ushort min_x = (cursor->select_pos_x < cursor->x) ? cursor->select_pos_x : cursor->x;
+    ushort max_x = (cursor->select_pos_x > cursor->x) ? cursor->select_pos_x : cursor->x;
+
+    ushort min_y = (cursor->select_pos_y < cursor->y) ? cursor->select_pos_y : cursor->y;
+    ushort max_y = (cursor->select_pos_y > cursor->y) ? cursor->select_pos_y : cursor->y;
+    if (cursor->visual_state == visual_state_COLUMN_SELECT)
+        min_y = 0,
+        max_y = SHEET_P.length;
+
     for (;min_y <= max_y; ++min_y) {
-        for (int x = min_x; x <= max_x; ++x) {
+        int from_x = (cursor->visual_state != visual_state_ROW_SELECT) * min_x;
+        int to_x = (cursor->visual_state == visual_state_ROW_SELECT) ? (rowExist(min_y) ? ROW_P(min_y).length : 0): max_x + 1;
+        for (; from_x < to_x; ++from_x) {
             // cast the void pointer into a function and then call it with the necessary arguments
             // fn_arg is an option argument the function can take. NULL can be passed if this argument isn't needed.
-            int res = ((int (*)(Cellulose* ,unsigned short,unsigned short, bool, void* arg))fn)(client,x, min_y, cellExist(client, x, min_y), fn_arg);
+            int res = ((int (*)(Cellulose* ,unsigned short,unsigned short, bool, void* arg))fn)(client,from_x, min_y, cellExist(client, from_x, min_y), fn_arg);
             if (res != 0)
                 return -1;
         }
@@ -115,24 +122,26 @@ static inline void createRowsTo(Cellulose *client, size_t y) {
 // Adds columns to a certain row until the number of columns in that row is equal to the argument x. Creates no columns if the number of columns in the row is equal to or greater than x.
 static inline int createColumnsTo(Cellulose *client, size_t row_index, size_t x) {
     for (size_t column = ROW_P(row_index).length; column <= x; ++column) {
-        char* empty_displayed;
-        if ((empty_displayed = malloc(CELL_LEN)) == NULL)
-            return -1;
-        strcpy(empty_displayed, EMPTY_CELL);
         cell_t empty_cell = {
-            .cell_type = t_int,
-            .displayed_value = empty_displayed
+            .cell_type = t_empty,
         };
         VEC_APPEND(ROW_P(row_index), empty_cell);
     }
     return 0;
 }
+static inline void deleteRow(Cellulose *client, size_t row) {
+    if (!rowExist(row))
+        return;
+    for (size_t cell_x = 0; cell_x < ROW_P(row).length; ++cell_x)
+        freeCell(CELL_P(row, cell_x)),
+        CELL_P(row, cell_x).cell_type = t_empty;
+    client->redraw_spreadsheet = true;
+}
 // sets the cell at the cursor x and y to the value inside cell_input
 static int setCell(Cellulose *client, ushort x, ushort y, str* cell_input) {
     if (!cellExist(client, x, y))
         createRowsTo(client, y),
-        createColumnsTo(client, y, x),
-        free(CELL_P(y, x).displayed_value);
+        createColumnsTo(client, y, x);
     char* output;
     // update the display value because the value has changed
     if ((output = calloc(15,1)) == NULL) return -1;

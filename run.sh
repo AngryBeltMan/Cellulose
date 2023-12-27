@@ -1,4 +1,5 @@
 #!/bin/sh
+INPUT_FILE="../test.csv";
 cmake_build() {
     cd build
     make
@@ -6,7 +7,7 @@ cmake_build() {
 valgrind_mode() {
     cmake_build
     echo "running using valgrind"
-    valgrind --leak-check=full ./cellulose
+    valgrind --leak-check=full ./cellulose $INPUT_FILE
 }
 test_mode() {
     echo "running all of the tests"
@@ -15,7 +16,7 @@ test_mode() {
 }
 run_normal() {
     cmake_build
-    ./cellulose
+    ./cellulose $INPUT_FILE
 }
 
 # get command line flags

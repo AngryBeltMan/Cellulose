@@ -32,15 +32,12 @@ void insertCell(char* value, size_t value_len, row_t *current_row, bool is_num) 
     VEC_APPEND((*current_row), current_cell);
 }
 
-Cellulose fromCSV(const char* file_path) {
+int fromCSV(Cellulose *client, const char* file_path) {
     FILE* fp = fopen(file_path, "r");
     if (fp == NULL) {
-        fprintf(stderr, "ERROR: encountered error opening file (%s).\n", strerror(errno));
-        fclose(fp);
-        exit(1);
+        fprintf(stderr, "ERROR: encountered error opening file %s. Error: (%s).\n", file_path, strerror(errno));
+        return -1;
     }
-
-    Cellulose client = newEmpty();
     // the max size
     size_t value_max = 6;
     size_t value_len = 0;
@@ -72,7 +69,7 @@ Cellulose fromCSV(const char* file_path) {
                 value = calloc(6, 1);
                 is_num = true;
                 assert(value && "Failed to malloc while parsing csv file.");
-                VEC_APPEND(SHEET, current_row);
+                VEC_APPEND(SHEET_P, current_row);
                 current_row = rowEmpty();
                 break;
             }
@@ -104,5 +101,5 @@ Cellulose fromCSV(const char* file_path) {
         VEC_FREE(current_row);
     // close the file once we are done with it
     fclose(fp);
-    return client;
+    return 0;
 }
