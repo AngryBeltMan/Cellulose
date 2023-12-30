@@ -13,7 +13,7 @@
 }
 
 // constructor for vec attribute type
-#define VEC_ATTR(_type, _name) struct _name { \
+#define VEC_ATTR(_type, _name) struct _name##vec { \
     size_t max_size, length;\
     _type* elements;\
 } _name
@@ -34,7 +34,15 @@
     }\
     _vec.elements[_vec.length] = _element;\
     ++_vec.length;
-
+#define VEC_APPEND_CPY(_vec, _element)\
+    if (!(_vec.length < _vec.max_size)) {\
+        _vec.max_size *= GROW_MULT;\
+        _vec.max_size += GROW_ADD;\
+        _vec.elements = realloc(_vec.elements, _vec.max_size * sizeof(_element));\
+        assert(_vec.elements && "ERROR: reallocation resulted in NULL");\
+    }\
+    memcpy(&_vec.elements[_vec.length], &_element, sizeof(_element)); \
+    ++_vec.length;
 // iterates over the vector
-#define VEC_ITER(_vec, _type, _element) _type _element = _vec.elements[0]; for (size_t _i = 1; _i <= _vec.length; _element = _vec.elements[_i], ++_i )
+#define VEC_ITER(_vec, _type, _element) _type _element = _vec.elements[0]; for (size_t _element##_index = 1; _element##_index <= _vec.length; _element = _vec.elements[_element##_index], ++_element##_index )
 ;

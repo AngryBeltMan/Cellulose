@@ -1,13 +1,13 @@
 #pragma once
+#include "../client_structs.h"
 #include <stdbool.h>
-
+#include "../str.h"
 typedef struct {
     // the coordinates of the cursor
     unsigned short x,y;
 
     // the coordinates of the cursor
     unsigned short select_pos_x,select_pos_y;
-    // This mode is used to select multiple cells
 
     // The different states visual mode may have.
     enum {
@@ -32,6 +32,8 @@ typedef struct {
         // This mode is used to type out commands
         COMMAND_MODE,
     } mode;
+    // This holds the cells that can be copy and pasted
+    VEC_ATTR(str ,clipboard);
 } cursor;
 
 // Cursor contructor function
@@ -41,6 +43,16 @@ static cursor initCursor() {
         .y = 0,
         .mode = NORMAL_MODE,
         .visual_state = visual_state_NONE,
-        .previous_char = '\0'
+        .previous_char = '\0',
+        .clipboard = VEC_NEW(str)
     };
+}
+// clears and frees all of the items in the clipboards for the cursor
+static int clearClipboard(cursor* cursor) {
+    VEC_ITER(cursor->clipboard, str, row) {
+        free(row.contents);
+    }
+    free(cursor->clipboard.elements);
+    cursor->clipboard.length = 0;
+    return 0;
 }

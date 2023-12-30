@@ -6,8 +6,9 @@
 #include <string.h>
 #include <sys/types.h>
 #include "config_include.h"
+#include "cell.h"
+#include "vec.h"
 #include "str.h"
-#include "client_structs.h"
 #include "cursor/cursor_include.h"
 
 // iterates over all of the selected cells
@@ -103,6 +104,14 @@ static inline int createColumnsTo(Cellulose *client, size_t row_index, size_t x)
         VEC_APPEND(ROW_P(row_index), empty_cell);
     }
     return 0;
+}
+static inline void deleteRow(Cellulose *client, size_t row) {
+    if (!rowExist(row))
+        return;
+    for (size_t cell_x = 0; cell_x < ROW_P(row).length; ++cell_x)
+        freeCell(CELL_P(row, cell_x)),
+        CELL_P(row, cell_x).cell_type = t_empty;
+    client->redraw_spreadsheet = true;
 }
 // sets the cell at the cursor x and y to the value inside cell_input
 static int setCell(Cellulose *client, ushort x, ushort y, str* cell_input) {

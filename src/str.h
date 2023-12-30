@@ -92,6 +92,15 @@ static int pushChar(str* string, char character) {
     }
     return 0;
 }
+static int appendStr(str* string, str* value) {
+    int res = 0;
+    for (size_t index = 0; index < value->len; ++index) {
+        res += pushChar(string, value->contents[index]);
+    }
+    if (res != 0)
+        return -1;
+    return 0;
+}
 // pops the front char in the string "foo" -> "fo"
 static int popFront(str *string) {
     // if the length is zero that means we can't pop anything

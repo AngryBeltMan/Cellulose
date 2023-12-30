@@ -1,5 +1,6 @@
 // displays the spreadsheet using ncurses if defined
 // not defined usually for debugging purposes
+#include "cursor/cursor.h"
 #define RENDER_TUI
 
 #include "ui/cli_ui.h"
@@ -45,5 +46,8 @@ int main(int argc, char **argv) {
     // exit when the escape key is pressed
     } while (in != 27);
 #endif
+    /* clearClipboard(&cursor); */
+    if (cursor.clipboard.length > 0)
+        clearClipboard(&cursor);
     exit(cleanUp(client));
 }
