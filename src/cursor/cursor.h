@@ -47,6 +47,16 @@ static cursor initCursor() {
         .clipboard = VEC_NEW(str)
     };
 }
+
+static int clipboardAddRowsTo(cursor* cursor, size_t row_to) {
+    while (cursor->clipboard.length <= row_to) {
+        str_res empty_str;
+        if ((empty_str = strNew()).result == -1)
+            return -1;
+        VEC_APPEND(cursor->clipboard, empty_str.string);
+    }
+    return 0;
+}
 // clears and frees all of the items in the clipboards for the cursor
 static int clearClipboard(cursor* cursor) {
     VEC_ITER(cursor->clipboard, str, row) {

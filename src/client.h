@@ -68,7 +68,8 @@ static int iterSelectedCells(Cellulose* client, cursor* cursor, void* fn, void* 
         for (; from_x < to_x; ++from_x) {
             // cast the void pointer into a function and then call it with the necessary arguments
             // fn_arg is an option argument the function can take. NULL can be passed if this argument isn't needed.
-            int res = ((int (*)(Cellulose* ,unsigned short,unsigned short, bool, void* arg))fn)(client,from_x, from_y, cellExist(client, from_x, from_y), fn_arg);
+            bool exists = cellExist(client, from_x, from_y);
+            int res = ((int (*)(Cellulose* ,unsigned short,unsigned short, bool, void* arg))fn)(client,from_x, from_y, exists, fn_arg);
             if (res != 0)
                 return -1;
         }

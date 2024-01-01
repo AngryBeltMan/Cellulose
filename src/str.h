@@ -72,10 +72,7 @@ static str_res fromDouble(long double value) {
     snprintf(str.contents, str.len + 8, "%Lf", value);
     return (str_res) {.string = str, .result = 0};
 }
-
-static int pushChar(str* string, char character) {
-    string->contents[string->len] = character;
-    if (++string->len == string->max_len) {
+static inline int strGrow(str* string) {
         string->max_len *= 2;
         if ((string->contents = realloc(string->contents, string->max_len) ) == NULL)
             return -1;
@@ -83,22 +80,26 @@ static int pushChar(str* string, char character) {
         char* original_address = string->contents;
 #endif
         // sets all of the garbage bytes from realloc to zero
-        memset(string->contents + string->len, 0x0,string->max_len - string->len );
+        memset(string->contents + string->len, 0x0, string->max_len - string->len );
 #ifdef CHECK_MEMSET
         // checks to see if the memory address changed after memset
         // if it did that means an error had occured
         if (original_address != string->contents) return -1;
 #endif
-    }
+        return 0;
+}
+static int pushChar(str* string, char character) {
+    string->contents[string->len] = character;
+    if (++string->len == string->max_len)
+        strGrow(string);
     return 0;
 }
+
 static int appendStr(str* string, str* value) {
-    int res = 0;
-    for (size_t index = 0; index < value->len; ++index) {
-        res += pushChar(string, value->contents[index]);
-    }
-    if (res != 0)
-        return -1;
+    while (string->max_len < value->len + string->len)
+        strGrow(string);
+    strcpy(string->contents + string->len, value->contents);
+    string->len += value->len;
     return 0;
 }
 // pops the front char in the string "foo" -> "fo"

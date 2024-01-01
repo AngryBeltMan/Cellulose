@@ -1,7 +1,8 @@
-#include "csv_tests.c"
-#include "tests.h"
+#include "../src/client.h"
+/* #include "csv_tests.c" */
+/* #include "tests.h" */
 int main(void) {
-    addMoreCells();
+    /* addMoreCells(); */
     /* test_client client =  initTestClient(); */
     /* appendTest(&client, &addMoreCells ); */
     /* runTests(&client); */

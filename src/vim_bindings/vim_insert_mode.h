@@ -5,9 +5,10 @@
 //sets all of the selected cell to a certain value
 static int setSelectedCells(Cellulose *client, ushort x, ushort y, bool exists, void* cell_input) {
     str input = strClone((str*)cell_input).string;
-    if (exists) {
-        /* if (CELL_P(y, x).cell_type == t_str) */
-        /*     free(CELL_P(y, x).cell_value.str); */
+    if (exists && CELL_P(y, x).cell_type != t_empty) {
+        free(CELL_P(y, x).displayed_value);
+        if (CELL_P(y, x).cell_type == t_str)
+            free(CELL_P(y, x).cell_value.str);
     }
     setCell(client, x, y, &input );
     return 0;
@@ -22,6 +23,7 @@ static int inputModeParseKey(Cellulose *client, cursor* cursor, int input, str *
                 // free the actual value if the cell type is str because that is stored on the heap
                 if (CUR_CELL_P.cell_type == t_str)
                     free(CUR_CELL_P.cell_value.str);
+                CUR_CELL_P.cell_type = t_empty;
             }
             // sets all of the cells selected to the inputed value
             if (cursor->visual_state != visual_state_NONE)

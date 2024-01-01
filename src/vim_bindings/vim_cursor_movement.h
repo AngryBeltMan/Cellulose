@@ -1,3 +1,4 @@
+#pragma once
 #include "../client.h"
 #include "../cursor/cursor.h"
 #include <ncurses.h>

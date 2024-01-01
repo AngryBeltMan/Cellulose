@@ -36,8 +36,6 @@ static int normalModeParseKey(Cellulose* client, cursor* cursor, str* cell_input
                 return -1;
             *cell_input = res.string;
         } break;
-        case 'y': {
-        } break;
     }
     // input will be between 0 to 255 so there should be no undefined behavior
     cursor->previous_char = input;
