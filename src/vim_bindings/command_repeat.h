@@ -2,7 +2,7 @@
 #include "../cursor/cursor_include.h"
 #include <math.h>
 // change the cursor's repetition attribute based
-static void changeRepetition(cursor* cursor, int num) {
+static void changeRepetition(cursor_t* cursor, int num) {
     cursor->repeat_count *= 10;
     cursor->repeat_count += num;
 

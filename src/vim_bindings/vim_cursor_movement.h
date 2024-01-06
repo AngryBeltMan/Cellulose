@@ -15,7 +15,6 @@
         client->pos_y += CALC_MOVEMENT(_client_y_amount, client->pos_y); \
     } else \
         renderSingleCell(client, cursor, (cursor->x - _client_x_amount) - client->pos_x, (cursor->y - _client_y_amount) -  client->pos_y);\
-    cursor->repeat_count = 0; break;
 
 static int touchingBottomEdge(Cellulose *client, int y) {
     return y >= client->pos_y + CLIENT_SHEET_HEIGHT;
@@ -30,7 +29,7 @@ static int touchingRightEdge(Cellulose *client, int x) {
 static int touchingLeftEdge(Cellulose *client, int x) {
     return x < client->pos_x;
 }
-static void gotoTop(Cellulose *client, cursor* cursor) {
+static void gotoTop(Cellulose *client, cursor_t* cursor) {
     if (cursor->previous_char != 'g')
         return;
     client->redraw_spreadsheet = true;
@@ -38,7 +37,7 @@ static void gotoTop(Cellulose *client, cursor* cursor) {
     cursor->y = 0;
 }
 
-static void gotoBottom(Cellulose *client, cursor* cursor) {
+static void gotoBottom(Cellulose *client, cursor_t* cursor) {
     client->redraw_spreadsheet = true;
     client->pos_y = (SHEET_LEN - CLIENT_SHEET_HEIGHT) * (SHEET_LEN > CLIENT_SHEET_HEIGHT);
     cursor->y = SHEET_LEN - (SHEET_LEN != 0);
@@ -47,12 +46,16 @@ static void gotoBottom(Cellulose *client, cursor* cursor) {
 #define CURSOR_MOVEMENT_CASES()  \
         case 'j':  \
             MOVE_CURSOR(MOVE_AMOUNT, 0, MOVE_AMOUNT, touchingBottomEdge(client, cursor->y), y );\
+            cursor->repeat_count = 0; break;\
         case 'k':  \
             MOVE_CURSOR(-MOVE_AMOUNT, 0, -MOVE_AMOUNT, touchingTopEdge(client, cursor->y) && client->pos_y > 0, y);\
+            cursor->repeat_count = 0; break;\
         case 'l':  \
             MOVE_CURSOR(MOVE_AMOUNT, MOVE_AMOUNT, 0,touchingRightEdge(client, cursor->x), x);\
+            cursor->repeat_count = 0; break;\
         case 'h':  \
             MOVE_CURSOR(-MOVE_AMOUNT, -MOVE_AMOUNT, 0,touchingLeftEdge(client, cursor->x) && client->pos_x > 0, x);\
+            cursor->repeat_count = 0; break;\
         case 'g': gotoTop(client, cursor); break; \
         case 'G': gotoBottom(client, cursor); break; \
         case '$': { \

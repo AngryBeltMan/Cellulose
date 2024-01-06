@@ -31,9 +31,9 @@ basic_run() {
 
 # get command line flags execute_mode will be used to see how to execute the executable
 case "${1}" in
-    "v") valgrind_mode ;;
-    "t") test_mode ;;
-    "m")
+    "-v") valgrind_mode ;;
+    "-t") test_mode ;;
+    "-m")
         MEMCHECK_FULL=1
         valgrind_mode ;;
     *) basic_run ;;

@@ -16,15 +16,15 @@
 static void drawColumnHeader(Cellulose *spreadsheet);
 static void drawRowHeader(Cellulose *spreadsheet);
 static void drawSpreadsheetDividers(bool *redraw);
-static inline void renderSingleCell(Cellulose* client, cursor* cursor, const size_t x, const size_t y);
+static inline void renderSingleCell(Cellulose* client, cursor_t* cursor, const size_t x, const size_t y);
 
 // render a single spreadsheet's row
-static void renderSingleRow(Cellulose *spreadsheet, cursor* cursor, const size_t row_index);
+static void renderSingleRow(Cellulose *spreadsheet, cursor_t* cursor, const size_t row_index);
 
 // takes in the client and renders its contents
 // the entire client is needed and not just the spreadsheet because there is other info needed
 // like the cursor position
-static void renderSpreadsheet(Cellulose *client, cursor* cursor) {
+static void renderSpreadsheet(Cellulose *client, cursor_t* cursor) {
     if (!client->redraw_spreadsheet)
         return;
     client->redraw_spreadsheet = false;
@@ -68,7 +68,7 @@ static void drawRowHeader(Cellulose *spreadsheet) {
     }
 }
 // see if the cell is being selected by the user in visual mode
-static bool isCellSelected(Cellulose *client, cursor* cursor, size_t cell_x, size_t cell_y) {
+static bool isCellSelected(Cellulose *client, cursor_t* cursor, size_t cell_x, size_t cell_y) {
     switch (cursor->visual_state) {
         case visual_state_NONE:
             return false;
@@ -86,12 +86,12 @@ static bool isCellSelected(Cellulose *client, cursor* cursor, size_t cell_x, siz
     }
 }
 
-static void renderSingleRow(Cellulose *client, cursor* cursor, const size_t row_index) {
+static void renderSingleRow(Cellulose *client, cursor_t* cursor, const size_t row_index) {
     for (size_t column = 0; column < CLIENT_SHEET_WIDTH; ++column)
         renderSingleCell(client, cursor, column, row_index);
 }
 
-static inline void renderSingleCell(Cellulose* client, cursor* cursor, const size_t x, const size_t y) {
+static inline void renderSingleCell(Cellulose* client, cursor_t* cursor, const size_t x, const size_t y) {
     // move where the text should be shown on the TUI
     move(y + 1,(x + 1) * 15);
     attron(COLOR_PAIR(STR_CELL_ID));

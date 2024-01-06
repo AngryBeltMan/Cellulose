@@ -8,7 +8,7 @@
         case 'y':  parseKeyDY(client, cursor, 'y'); break;  \
         case 'p':  parseKeyP(client, cursor);  break;
 
-static int addCellToClipboard(cursor* cursor, cell_t cell, size_t clipboard_row) {
+static int addCellToClipboard(cursor_t* cursor, cell_t cell, size_t clipboard_row) {
     str contents;
     if (cell.cell_type == t_str) {
         str_res res = fromCharArray(cell.cell_value.str);
@@ -29,7 +29,7 @@ static int addCellToClipboard(cursor* cursor, cell_t cell, size_t clipboard_row)
 }
 
 static int deleteCells(Cellulose *client,unsigned short x, unsigned short y, bool exist, void* arg_cursor) {
-    cursor* cur = (cursor*)arg_cursor;
+    cursor_t* cur = (cursor_t*)arg_cursor;
     // calculates the greater and smaller y value between the cursor y position and the cells y position in the spreadsheet
     size_t min_y =  ((cur->select_pos_y >= y) * y) + ((cur->select_pos_y < y) * cur->select_pos_y);
     size_t max_y = (cur->select_pos_y + y) - min_y;
@@ -49,7 +49,7 @@ static int deleteCells(Cellulose *client,unsigned short x, unsigned short y, boo
 }
 
 static int copyCells(Cellulose *client,unsigned short x, unsigned short y, bool exist, void* arg_cursor) {
-    cursor* cur = (cursor*)arg_cursor;
+    cursor_t* cur = (cursor_t*)arg_cursor;
     size_t min_y =  ((cur->select_pos_y >= y) * y) + ((cur->select_pos_y < y) * cur->select_pos_y);
     size_t max_y = (cur->select_pos_y + y) - min_y;
 
@@ -63,7 +63,7 @@ static int copyCells(Cellulose *client,unsigned short x, unsigned short y, bool 
     return 0;
 }
 // parses either key d or y cause they are very similar
-static int parseKeyDY(Cellulose* client, cursor* cursor, char key) {
+static int parseKeyDY(Cellulose* client, cursor_t* cursor, char key) {
     if (cursor->clipboard.length > 0)
         clearClipboard(cursor),
         cursor->clipboard = (struct clipboardvec)VEC_NEW(str);
@@ -84,7 +84,7 @@ static int parseKeyDY(Cellulose* client, cursor* cursor, char key) {
     return 0;
 }
 
-static int pasteClipboard(Cellulose* client, cursor* cursor) {
+static int pasteClipboard(Cellulose* client, cursor_t* cursor) {
     client->redraw_spreadsheet = true;
     VEC_ITER(cursor->clipboard, str, clipboard_value) {
         size_t offset = 0;
@@ -113,13 +113,14 @@ static int pasteClipboard(Cellulose* client, cursor* cursor) {
     return 0;
 }
 
-static void parseKeyP(Cellulose* client, cursor* cursor) {
-    for (size_t repeat_count = 0; repeat_count < (cursor->repeat_count + (cursor->repeat_count == 0)); ++repeat_count) {
+static void parseKeyP(Cellulose* client, cursor_t* cursor) {
+    size_t repeat_amount = (cursor->repeat_count + (cursor->repeat_count == 0));
+    for (size_t repeat_count = 0; repeat_count < repeat_amount; ++repeat_count) {
         pasteClipboard(client, cursor);
         // move the cursor down so it is just below the text it pasted
         MOVE_CURSOR(cursor->clipboard.length, 0, cursor->clipboard.length, touchingBottomEdge(client, cursor->y), y);
     }
-    client->redraw_spreadsheet = true;
     cursor->repeat_count = 0;
+    client->redraw_spreadsheet = true;
 }
 

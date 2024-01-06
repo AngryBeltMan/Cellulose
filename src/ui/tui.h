@@ -3,6 +3,7 @@
 #include "../client.h"
 #include "../config_include.h"
 
+
 // sets up important features needed for rendering the spreadsheet
 static void startScreen() {
     initscr();
@@ -23,8 +24,10 @@ static void startScreen() {
     initCellColors();
 }
 // deallocates uneeded varibles and exits the TUI if a certain preprossesor is set
-static int cleanUp(Cellulose client) {
+static int cleanUp(Cellulose client, cursor_t cursor) {
     freeSpreadsheet(client);
+    if (cursor.clipboard.length > 0)
+        clearClipboard(&cursor);
 #ifdef RENDER_TUI
     endwin();
 #endif

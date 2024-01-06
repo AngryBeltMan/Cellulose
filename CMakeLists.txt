@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 project(cellulose)
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 # the path to a file that includes information on how the spreadsheet should be look, macros, plugins, etc
 set(CONFIG_DIR config.h)

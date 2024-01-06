@@ -1,34 +1,42 @@
 #pragma once
 #include <ncurses.h>
-// id for cell type str
+
+#define CMD_MAP_SIZE 15
+// text color id for cell type str
 #define STR_CELL_ID 1
 
-// id for cell type str
+// text color id for cell type str
 #define INT_CELL_ID 6
 
-// id for the color of the column cells (X coordinate)
+// text color id for the color of the column cells (X coordinate)
 #define COLUMN_CELL_ID 2
 
-// id for the color of the row cells (Y coordinate)
+// text color id for the color of the row cells (Y coordinate)
 #define ROW_CELL_ID 3
 
-// the id for the color when the cursor is hovering over that cell
+// the text color id for the color when the cursor is hovering over that cell
 #define CURSOR_CELL_ID 4
 
-// the id for the color when the cursor is selecting many cells
+// the text color id for the color when the cursor is selecting many cells
 #define SELECTED_CELL_ID 5
 
-// the id for when the cursor is in normal mode
+// the text color id for when the cursor is in normal mode
 #define MODE_NORMAL_ID 7
 
-// the id for when the cursor is in editing mode
+// the text color id for when the cursor is in editing mode
 #define MODE_EDIT_ID 8
 
-// the id for when the cursor is in select mode
+// the text color id for when the cursor is in select mode
 #define MODE_SELECT_ID 9
 
-// the id for displaying the bg and fg of the cursor mode
+// the text color id for displaying the bg and fg of the cursor mode
 #define CURSOR_MODE_ID 10
+
+// the text color id for when general information is displayed to the user
+#define INFO_MSG_ID 11
+
+// the text color id for when an error occured with a command
+#define ERROR_MSG_ID 12
 
 #define GREY_ID 100
 #define PURPLE_ID 101
@@ -65,4 +73,7 @@ static void initCellColors() {
 
     init_pair(CURSOR_MODE_ID, COLOR_WHITE, COLOR_BLACK );
 
+    // MSG ids
+    init_pair(INFO_MSG_ID, COLOR_BLUE, COLOR_WHITE );
+    init_pair(ERROR_MSG_ID, COLOR_RED, GREY_ID );
 }
