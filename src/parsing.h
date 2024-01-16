@@ -2,4 +2,4 @@
 #pragma once
 #include "client.h"
 // opens and parses a csv file
-int fromCSV(Cellulose *client, const char* file_path);
+int fromCSV(Cellulose *client);

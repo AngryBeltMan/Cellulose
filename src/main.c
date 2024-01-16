@@ -2,7 +2,6 @@
 // not defined usually for debugging purposes
 #define RENDER_TUI
 
-#include "commands/cmd.c"
 #include "config.h"
 #include "cursor/cursor.h"
 #include "messages.h"
@@ -21,11 +20,7 @@
 #include "vim_bindings/vim_bindings.h"
 
 #include "parsing.h"
-#include "parsing.c"
 #include "vec.h"
-
-#include "cursor/cursor.c"
-#include "client.c"
 
 
 int main(int argc, char **argv) {
@@ -34,25 +29,35 @@ int main(int argc, char **argv) {
         exit(0);
     cursor_t cursor = initCursor();
     // user input
-    Cellulose client = newEmpty();
-    int parsing_res = fromCSV(&client, argv[1]);
+    Cellulose client = newEmpty(argv[1]);
+    int parsing_res = fromCSV(&client);
     if (parsing_res) {
         printf("ERROR: failed to parse/open input file.\n");
         exit(1);
     }
-
 #ifdef RENDER_TUI
     str user_input;
     int in = 0x0;
     startScreen();
     do {
         if (parseVimMotion(&client, &cursor, &user_input, in) == -1)
-            exit(cleanUp(client, cursor));
+            exit(cleanUp(client, cursor, user_input));
         drawSpreadsheetDividers(&client.redraw_dividers);
         renderSpreadsheet(&client, &cursor);
         renderCursor(&cursor, &client);
         renderCommandLine(&cursor, &user_input, client.redraw_cli);
         in = getch();
     } while (1);
+
+#else
+    const char input[] = "v3j3l:shuffle\n";
+    size_t input_len = strlen(input);
+    str user_input;
+    for (size_t input_index = 0; input_index < input_len; ++input_index) {
+        if (parseVimMotion(&client, &cursor, &user_input, input[input_index]) == -1) {
+            printf("FAIL!\n");
+            exit(cleanUp(client, cursor, user_input));
+        }
+    }
 #endif
 }

@@ -49,31 +49,8 @@
 #define COLUMN_HEADER_BG "                                                                                                                                                                                    "
 
 #define CURSOR_COORD_FORMATTING "{%u, %u}"
-static void initCellColors() {
-    // create new color grey
-    init_color(GREY_ID, 750, 750, 750);
 
-    // create new color grey
-    init_color(PURPLE_ID, 550, 50, 450);
-
-    // arg 1 foreground arg2 background
-    init_pair(STR_CELL_ID, COLOR_BLACK, GREY_ID );
-
-    init_pair(INT_CELL_ID, COLOR_BLUE, GREY_ID );
-
-    init_pair(COLUMN_CELL_ID, COLOR_BLACK, COLOR_GREEN );
-
-    init_pair(ROW_CELL_ID, COLOR_BLACK, COLOR_CYAN );
-
-    init_pair(MODE_NORMAL_ID, COLOR_WHITE, COLOR_BLACK );
-
-    init_pair(MODE_EDIT_ID, COLOR_BLACK, COLOR_CYAN );
-
-    init_pair(SELECTED_CELL_ID, COLOR_WHITE, PURPLE_ID );
-
-    init_pair(CURSOR_MODE_ID, COLOR_WHITE, COLOR_BLACK );
-
-    // MSG ids
-    init_pair(INFO_MSG_ID, COLOR_BLUE, COLOR_WHITE );
-    init_pair(ERROR_MSG_ID, COLOR_RED, GREY_ID );
-}
+// the type of integer that should be used to store the cells/cursor/etc coordinates
+typedef uint16_t coord_int_t;
+// the type of floating point number the cell will hold if it of type num
+typedef double cell_num_t;

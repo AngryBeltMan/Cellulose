@@ -45,4 +45,4 @@
     ++_vec.length;
 // iterates over the vector
 #define VEC_ITER(_vec, _type, _element) _type _element = _vec.elements[0]; for (size_t _element##_index = 1; _element##_index <= _vec.length; _element = _vec.elements[_element##_index], ++_element##_index )
-;
+

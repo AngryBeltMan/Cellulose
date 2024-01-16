@@ -14,34 +14,16 @@
         client->pos_x += CALC_MOVEMENT(_client_x_amount, client->pos_x); \
         client->pos_y += CALC_MOVEMENT(_client_y_amount, client->pos_y); \
     } else \
-        renderSingleCell(client, cursor, (cursor->x - _client_x_amount) - client->pos_x, (cursor->y - _client_y_amount) -  client->pos_y);\
+        renderSingleCell(client, cursor, (cursor->x - _client_x_amount) - client->pos_x, (cursor->y - _client_y_amount) -  client->pos_y);
 
-static int touchingBottomEdge(Cellulose *client, int y) {
-    return y >= client->pos_y + CLIENT_SHEET_HEIGHT;
-}
-static int touchingTopEdge(Cellulose *client, int y) {
-    return y <= client->pos_y;
-}
+int touchingBottomEdge(Cellulose *client, int y);
+int touchingTopEdge(Cellulose *client, int y);
+int touchingRightEdge(Cellulose *client, int x);
+int touchingLeftEdge(Cellulose *client, int x);
 
-static int touchingRightEdge(Cellulose *client, int x) {
-    return x >= client->pos_x + CLIENT_SHEET_WIDTH;
-}
-static int touchingLeftEdge(Cellulose *client, int x) {
-    return x < client->pos_x;
-}
-static void gotoTop(Cellulose *client, cursor_t* cursor) {
-    if (cursor->previous_char != 'g')
-        return;
-    client->redraw_spreadsheet = true;
-    client->pos_y = 0;
-    cursor->y = 0;
-}
+void gotoTop(Cellulose *client, cursor_t* cursor);
+void gotoBottom(Cellulose *client, cursor_t* cursor);
 
-static void gotoBottom(Cellulose *client, cursor_t* cursor) {
-    client->redraw_spreadsheet = true;
-    client->pos_y = (SHEET_LEN - CLIENT_SHEET_HEIGHT) * (SHEET_LEN > CLIENT_SHEET_HEIGHT);
-    cursor->y = SHEET_LEN - (SHEET_LEN != 0);
-}
 // all of the cases for cursor movement
 #define CURSOR_MOVEMENT_CASES()  \
         case 'j':  \
@@ -59,10 +41,11 @@ static void gotoBottom(Cellulose *client, cursor_t* cursor) {
         case 'g': gotoTop(client, cursor); break; \
         case 'G': gotoBottom(client, cursor); break; \
         case '$': { \
-            if (cursor->y < SHEET_P.length) \
+            if (cursor->y < SHEET_P.length) {\
                 client->redraw_spreadsheet = true;\
-                cursor->x = ROW_P(cursor->y).length - (ROW_P(cursor->y).length != 0), \
+                cursor->x = ROW_P(cursor->y).length - (ROW_P(cursor->y).length != 0); \
                 client->pos_x = (ROW_P(cursor->y).length - CLIENT_SHEET_WIDTH) * (ROW_P(cursor->y).length > CLIENT_SHEET_WIDTH); \
+            }\
         } break; \
         case '_': \
             client->redraw_spreadsheet = true;\

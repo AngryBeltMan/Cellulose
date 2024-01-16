@@ -1,4 +1,6 @@
 #pragma once
+#include "config.h"
+#include "config_include.h"
 #include "vec.h"
 #include "cell.h"
 #include "str.h"
@@ -26,7 +28,7 @@ typedef  VEC(row_t) spreadsheet_t;
 
 typedef struct {
     // the positon of the spreadsheet. Only cells within an area of (pos_x + screen width, pos_y + screen height) will be rendered
-    uint16_t pos_x,pos_y;
+    coord_int_t pos_x,pos_y;
     // the spreadsheet
     spreadsheet_t spread_sheet;
     // when true the corresponding elements will be redrawn
@@ -35,25 +37,29 @@ typedef struct {
     bool should_exit;
     // check if updates have been made but not saved
     bool has_saved;
+    // Name of the file. Used for saving the file.
+    const char* name;
 } Cellulose;
 
+typedef int (* selected_fn_t)(Cellulose* ,unsigned short,unsigned short, bool, void* arg);
+
 // Constructor for struct Cellulose. All of the attributes have their own "default" value.
-Cellulose newEmpty();
+Cellulose newEmpty(const char* file_name);
 
 // checks to see if a certain cell coordinate exists in the spreadsheet
-static inline bool cellExist(Cellulose *client, size_t x, size_t y);
+bool cellExist(Cellulose *client, size_t x, size_t y);
 
 // writes to a given file with arg seperator seperating each value
-void writeContents(char seperator, row_t* spreadsheet, FILE* output );
+int saveSpreadsheet(Cellulose *client);
 
 void freeSpreadsheet(Cellulose cellulose);
 
-static int iterSelectedCells(Cellulose* client, cursor_t* cursor, void* fn, void* fn_arg);
+int iterSelectedCells(Cellulose *client, cursor_t* cursor, selected_fn_t fn, void* fn_arg);
 
-static inline void setCellValue(Cellulose *client, ushort x, ushort y, str* cell_input);
+void setCellValue(Cellulose *client, coord_int_t x, coord_int_t y, str* cell_input);
 
-static inline void createRowsTo(Cellulose *client, size_t y);
+void createRowsTo(Cellulose *client, size_t y);
 
-static inline int createColumnsTo(Cellulose *client, size_t row_index, size_t x);
+int createColumnsTo(Cellulose *client, size_t row_index, size_t x);
 
-static int setCell(Cellulose *client, ushort x, ushort y, str* cell_input);
+int setCell(Cellulose *client, coord_int_t x, coord_int_t y, str* cell_input);

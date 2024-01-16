@@ -15,7 +15,7 @@ cursor_t initCursor() {
 int clipboardAddRowsTo(cursor_t* cursor, size_t row_to) {
     while (cursor->clipboard.length <= row_to) {
         str_res empty_str;
-        if ((empty_str = strNew()).result == -1)
+        if ((empty_str = strNew()).result != str_no_error)
             return -1;
         VEC_APPEND(cursor->clipboard, empty_str.string);
     }
@@ -26,7 +26,6 @@ int clearClipboard(cursor_t* cursor) {
     VEC_ITER(cursor->clipboard, str, row) {
         free(row.contents);
     }
-    free(cursor->clipboard.elements);
     cursor->clipboard.length = 0;
     return 0;
 }

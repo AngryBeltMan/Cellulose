@@ -4,6 +4,7 @@
 #include "vim_cursor_movement.h"
 #include "vim_visual_transitions.h"
 #include "command_repeat.h"
+#include "../config_include.h"
 #include <stdio.h>
 #include <string.h>
 static str_res cellValueAsStr(Cellulose* client, cursor_t* cursor );
@@ -36,6 +37,8 @@ static int normalModeParseKey(Cellulose* client, cursor_t* cursor, str* cell_inp
         } break;
         case 27: {
             cursor->visual_state = visual_state_NONE;
+            cursor->mode = NORMAL_MODE;
+            // get rid of all of the purple selected cells
             client->redraw_spreadsheet = true;
         } break;
         case '/':

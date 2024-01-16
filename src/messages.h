@@ -13,4 +13,4 @@
     printw(COLUMN_HEADER_BG);\
     move(CLIENT_SHEET_HEIGHT + 1, 1); \
     attron(COLOR_PAIR(ERROR_MSG_ID)); \
-    printw(_fmt, __VA_ARGS__); \
+    printw(_fmt, __VA_ARGS__);

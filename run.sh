@@ -1,15 +1,10 @@
 #!/bin/sh
 MEMCHECK_FULL=0
-INPUT_FILE="../test.csv"
-FILE_RUNNED=./cellulose
-
-cmake_build() {
-    cd build
-    make
-}
+INPUT_FILE="test.csv"
+FILE_RUNNED=./build/cellulose
 
 valgrind_mode() {
-    cmake_build
+    make
     echo "running using valgrind"
     if [ $MEMCHECK_FULL ]
     then
@@ -25,7 +20,7 @@ test_mode() {
     ./tests.out
 }
 basic_run() {
-    cmake_build
+    make
     $FILE_RUNNED $INPUT_FILE
 }
 

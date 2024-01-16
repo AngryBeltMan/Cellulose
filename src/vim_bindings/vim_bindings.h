@@ -11,4 +11,5 @@ static int parseVimMotion(Cellulose *client, cursor_t* cursor, str *input_mode_s
         case COMMAND_MODE:
         case INSERT_MODE:  return parseCliInput(client, cursor, input, input_mode_string);
     }
+    return -1;
 }
