@@ -2,9 +2,9 @@
 ## WARNING - This project may still have unexpected bugs as it is still a work in progress.
 ## Documentation
 ### Command Documentation
-[a link](https://github.com/AngryBeltMan/Cellulose/blob/master/src/commands/README.md)
+[here](https://github.com/AngryBeltMan/Cellulose/blob/master/src/commands/README.md)
 ### Formatting Documentation
-[a link](https://github.com/AngryBeltMan/Cellulose/blob/master/src/formatting/README.md)
+[here](https://github.com/AngryBeltMan/Cellulose/blob/master/src/formatting/README.md)
 ## TODO
 V) Add an equation parser for insert mode. <br />
 V) Finish Command parser. <br />
