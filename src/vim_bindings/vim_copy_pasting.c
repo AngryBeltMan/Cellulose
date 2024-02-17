@@ -35,6 +35,7 @@ int deleteCells(Cellulose *client, unsigned short x, unsigned short y, bool exis
 
     if (exist && CELL_P(y, x).cell_type != t_empty) {
         free(CELL_P(y, x).displayed_value);
+        CELL_P(y, x).displayed_value = NULL;
         addCellToClipboard(cur, CELL_P(y, x), clipboard_row_index);
         CELL_P(y,x).cell_type = t_empty;
     }

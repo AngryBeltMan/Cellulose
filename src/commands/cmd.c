@@ -95,7 +95,7 @@ int runCommand(Cellulose* client, cursor_t* cursor, char *input) {
             LOG_ERROR("NOT ENOUGH ARGS expected %i got %lu\n", cmd.arg_count, arguments );
             return 0;
         }
-        args[arguments] = strToNum(arg, strlen(arg));
+        args[arguments] = atof(arg);
         ++arguments;
         arg = strtok(NULL, ",");
     }

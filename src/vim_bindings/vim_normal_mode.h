@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <string.h>
 static str_res cellValueAsStr(Cellulose* client, cursor_t* cursor );
-// parses the key input in normal mode
 static int normalModeParseKey(Cellulose* client, cursor_t* cursor, str* cell_input, int input) {
     switch (input) {
         CURSOR_MOVEMENT_CASES()

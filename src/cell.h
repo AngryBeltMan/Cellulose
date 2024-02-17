@@ -38,5 +38,9 @@ void create_cell(char* output, char* value, size_t value_len);
 
 // converts a string to a floating point value. Used to convert some of the cells into integers while parsing
 cell_num_t strToNum(char* value, size_t len);
-// get/converts the cell value into a str
-/* str_res cellToStr(cell_t cell); */
+
+int setCellFloat(cell_t *p_cell, cell_num_t value);
+
+int setCellWhole(cell_t *p_cell, int value);
+// create an empty cell with no display value with type t_empty
+cell_t createCellEmpty();

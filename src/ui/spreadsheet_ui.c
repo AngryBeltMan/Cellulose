@@ -1,19 +1,16 @@
 #include "spreadsheet_ui.h"
-
 static void renderSingleRow(Cellulose *client, cursor_t* cursor, const size_t row_index);
-static void drawColumnHeader(Cellulose *spreadsheet);
-static void drawRowHeader(Cellulose *spreadsheet);
 static bool isCellSelected(Cellulose *client, cursor_t* cursor, size_t cell_x, size_t cell_y);
 
 void renderSpreadsheet(Cellulose *client, cursor_t* cursor) {
     if (!client->redraw_spreadsheet)
         return;
     client->redraw_spreadsheet = false;
-    // draws the row and column header
-    attron(COLOR_PAIR(COLUMN_CELL_ID));
-    drawColumnHeader(client);
-    attron(COLOR_PAIR(ROW_CELL_ID));
-    drawRowHeader(client);
+    // redrawing the spreadsheet also redraws the column and row header
+    client->redraw_row_header = true;
+    client->redraw_column_header = true;
+    drawColumnHeader(client, cursor);
+    drawRowHeader(client, cursor);
     move(0,0);
     // the fill for the block at (0,0)
     attron(COLOR_PAIR(STR_CELL_ID));
@@ -50,18 +47,28 @@ draw_empty_cell:
     printw(EMPTY_CELL);
 }
 
-static void drawColumnHeader(Cellulose *spreadsheet) {
+void drawColumnHeader(Cellulose *spreadsheet, cursor_t *cursor) {
+    if (!spreadsheet->redraw_column_header)
+        return;
+    // draws the row and column header
+    attron(COLOR_PAIR(COLUMN_CELL_ID));
     // clear the column of its original values
     move(0,0);
     attron(COLOR_PAIR(COLUMN_CELL_ID));
     printw(COLUMN_HEADER_BG);
     for (int column = 0; column <= CLIENT_SHEET_WIDTH; ++column) {
         move(0, (column * 15) + 6);
-        printw("%i", column + spreadsheet->pos_x);
+        if (column - 1 == cursor->x - spreadsheet->pos_x)
+            printw("(%i)", cursor->x + 1);
+        else
+            printw("%i", abs(column - (cursor->x + 1 - spreadsheet->pos_x)));
     }
-
+    spreadsheet->redraw_column_header = true;
 }
-static void drawRowHeader(Cellulose *spreadsheet) {
+void drawRowHeader(Cellulose *spreadsheet, cursor_t *cursor) {
+    if (!spreadsheet->redraw_row_header)
+        return;
+    attron(COLOR_PAIR(ROW_CELL_ID));
     int row;
     // sets the background for all of the row header cells
     for (row = 0; row <= CLIENT_SHEET_HEIGHT; ++row) {
@@ -71,8 +78,12 @@ static void drawRowHeader(Cellulose *spreadsheet) {
     for (row = 0; row <= CLIENT_SHEET_HEIGHT; ++row) {
         // three is the right offset
         move(row, 3);
-        printw("%i", row + spreadsheet->pos_y);
+        if (row - 1 == cursor->y - spreadsheet->pos_y)
+            printw("  %i", cursor->y + 1);
+        else
+            printw("%i", abs(row - (cursor->y + 1 - spreadsheet->pos_y)));
     }
+    spreadsheet->redraw_row_header = true;
 }
 // see if the cell is being selected by the user in visual mode
 static bool isCellSelected(Cellulose *client, cursor_t* cursor, size_t cell_x, size_t cell_y) {

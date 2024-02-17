@@ -1,5 +1,6 @@
 #!/bin/sh
 MEMCHECK_FULL=0
+ENABLE_GDB=0
 INPUT_FILE="test.csv"
 FILE_RUNNED=./build/cellulose
 
@@ -9,15 +10,15 @@ valgrind_mode() {
     if [ $MEMCHECK_FULL ]
     then
         echo Enabling full memcheck
-        valgrind --leak-check=full $FILE_RUNNED $INPUT_FILE
+        valgrind --leak-check=full --show-leak-kinds=definite --log-file="valgrind_log.txt" $FILE_RUNNED $INPUT_FILE
     else
         valgrind $FILE_RUNNED $INPUT_FILE
     fi
 }
 test_mode() {
     echo "running all of the tests"
-    gcc -g -Wall -Wextra -Wpedantic -o tests.out tests/test.c -lncurses -lm
-    ./tests.out
+    make test
+    ./tests/cellulose_test
 }
 basic_run() {
     make
@@ -28,6 +29,9 @@ basic_run() {
 case "${1}" in
     "-v") valgrind_mode ;;
     "-t") test_mode ;;
+    "-gt")
+        ENABLE_GDB=1
+        test_mode ;;
     "-m")
         MEMCHECK_FULL=1
         valgrind_mode ;;

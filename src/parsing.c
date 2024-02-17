@@ -10,26 +10,23 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#define SHEET client.spread_sheet
 // converts the file stream char to a number correctly if the char is '0' ... '9'
 #define CH_INT ((int)ch - 48)
 
 static void insertCell(row_t *current_row, str* str, bool is_num) {
+    // if there is nothing in the cell then insert cell type empty
+    if (str->len == 0) {
+        cell_t empty_cell = createCellEmpty();
+        VEC_APPEND((*current_row), empty_cell );
+        return;
+    }
     cell_t current_cell;
     char* disp_val = malloc(CELL_LEN + 1);
     create_cell(disp_val, str->contents,  str->len);
     current_cell.displayed_value = disp_val;
-    // if there is nothing in the cell then insert cell type empty
-    if (str->len == 0) {
-        cell_t empty_cell = {
-            .cell_type = t_empty
-        };
-        VEC_APPEND((*current_row), empty_cell );
-        return;
-    }
     if (is_num)
         // frees value because function freeSpreadsheet won't be able to free it
-        current_cell.cell_value.number = strToNum(str->contents, str->len),
+        current_cell.cell_value.number = atof(str->contents),
         free(str->contents),
         current_cell.cell_type = t_int;
     else
@@ -63,6 +60,9 @@ int fromCSV(Cellulose *client) {
             case ',': {
                 insertCell(&current_row, &value, is_num);
                 is_num = true;
+                // skip on creating a new cell if the current cell is already empty
+                if (value.len == 0)
+                    continue;
                 if ((res = strNew()).result == -1) {
                     printf("ERROR: failed to malloc cell value.");
                     return -1;
@@ -71,14 +71,17 @@ int fromCSV(Cellulose *client) {
             } break;
             case '\n': {
                 insertCell(&current_row, &value, is_num);
+                VEC_APPEND(SHEET_P, current_row);
+                current_row = (row_t)VEC_NEW(cell_t);
+                // skip on creating a new cell if the current cell is already empty
+                if (value.len == 0)
+                    continue;
                 is_num = true;
                 if ((res = strNew()).result == -1) {
                     printf("ERROR: failed to malloc cell value.");
                     return -1;
                 }
                 value = res.string;
-                VEC_APPEND(SHEET_P, current_row);
-                current_row = (row_t)VEC_NEW(cell_t);
             } break;
             default: {
                 // becomes false if the character is not a number or stays false if it vas never a number

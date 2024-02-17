@@ -46,9 +46,24 @@ str_res strClone(str* string);
 // return a str with its contents holding value as a char array
 // doesn't currently work with floating point numbers
 str_res fromDouble(long double value);
+str_res fromNum(unsigned int value);
+
 int pushChar(str* string, char character);
 
+int appendDouble(str* string, long double value);
+int appendNum(str* string, unsigned int value);
 int appendStr(str* string, str* value);
+// Copys the argument value into str. Value is const an reatains its original value.
+// Value must not be null or the code will abort.
+// Arguments:
+// @str - The string that will have argument value appended to.
+// @value - The value that will be appended to arg str.
+// @v_len - The amount of bytes of arg value that will be written to str.
+int appendCharArray(str* str, const char* value, size_t v_len);
+
+// Similar to function AppendCharArray, however the entire argument value is append.
+int appendCAFull(str *str, const char* value);
+
 // pops the front char in the string "foo" -> "fo"
 int popFront(str *string);
 
@@ -63,5 +78,6 @@ bool isNum(str* string);
 // If there is a value at index "index" then in will take it place and it will be left one place.
 int insertAt_char(str* str, size_t index, char in);
 
-// puts the chars in the char array "in" into the str at the specified index
+// copys the chars in the char array "in" into the str at the specified index
 int insertAt_char_array(str* str, size_t index, char* in);
+/* int strReplace(str *str, char* find, char* replace); */

@@ -17,3 +17,5 @@ void renderSingleCell(Cellulose* client, cursor_t* cursor, const size_t x, const
 // If redraw is true, draw the line that divedes the cells on the x-axis.
 void drawSpreadsheetDividers(bool *redraw);
 
+void drawColumnHeader(Cellulose *spreadsheet, cursor_t *cursor);
+void drawRowHeader(Cellulose *spreadsheet, cursor_t *cursor);

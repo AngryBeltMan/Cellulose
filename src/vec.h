@@ -24,7 +24,11 @@
 }
 #define VEC_NEW(_type) VEC_SIZED(_type, DEFAULT_SIZE)
 #define VEC_LEN(_vec) _vec.length
-#define VEC_FREE(_vec) free(_vec.elements)
+#define VEC_FREE(_vec) \
+    do { \
+        free(_vec.elements);\
+        _vec.elements = NULL; \
+    } while (0);
 #define VEC_APPEND(_vec, _element) \
     if (!(_vec.length < _vec.max_size)) {\
         _vec.max_size *= GROW_MULT;\

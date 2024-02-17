@@ -24,6 +24,7 @@
 
 
 int main(int argc, char **argv) {
+    initLogFile();
     if (argc == 1)
         printf("Cellulose; a spreadsheet editor with vim-like bindings.\nTo begin provide a path to a file to begin editing the file.\n"),
         exit(0);
@@ -41,23 +42,27 @@ int main(int argc, char **argv) {
     startScreen();
     do {
         if (parseVimMotion(&client, &cursor, &user_input, in) == -1)
-            exit(cleanUp(client, cursor, user_input));
+            goto main_clean_up;
         drawSpreadsheetDividers(&client.redraw_dividers);
         renderSpreadsheet(&client, &cursor);
+        drawColumnHeader(&client, &cursor);
+        drawRowHeader(&client, &cursor);
         renderCursor(&cursor, &client);
         renderCommandLine(&cursor, &user_input, client.redraw_cli);
         in = getch();
     } while (1);
-
 #else
-    const char input[] = "v3j3l:shuffle\n";
+    const char input[] = "lvjjjif|%{1:y}\n:q\n";
     size_t input_len = strlen(input);
     str user_input;
     for (size_t input_index = 0; input_index < input_len; ++input_index) {
         if (parseVimMotion(&client, &cursor, &user_input, input[input_index]) == -1) {
-            printf("FAIL!\n");
-            exit(cleanUp(client, cursor, user_input));
+            goto main_clean_up;
         }
     }
 #endif
+
+main_clean_up:
+    exit(cleanUp(client, cursor, user_input));
+    freeLogFile();
 }

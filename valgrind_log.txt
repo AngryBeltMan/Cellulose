@@ -1,0 +1,140 @@
+==39256== Memcheck, a memory error detector
+==39256== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==39256== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==39256== Command: ./build/cellulose test.csv
+==39256== Parent PID: 39252
+==39256== 
+==39256== Invalid read of size 8
+==39256==    at 0x10B596: writeContents (saving.c:31)
+==39256==    by 0x10B42E: saveSpreadsheet (saving.c:24)
+==39256==    by 0x10F0A0: commandSave (system_cmd.c:10)
+==39256==    by 0x10DC92: runCommand (cmd.c:84)
+==39256==    by 0x111100: parseCliInput (vim_insert_mode.c:139)
+==39256==    by 0x112DD7: parseVimMotion (vim_bindings.h:12)
+==39256==    by 0x112ECA: main (main.c:44)
+==39256==  Address 0x4bea678 is 0 bytes after a block of size 120 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B982: fromCSV (parsing.c:47)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== Invalid read of size 8
+==39256==    at 0x10B599: writeContents (saving.c:31)
+==39256==    by 0x10B42E: saveSpreadsheet (saving.c:24)
+==39256==    by 0x10F0A0: commandSave (system_cmd.c:10)
+==39256==    by 0x10DC92: runCommand (cmd.c:84)
+==39256==    by 0x111100: parseCliInput (vim_insert_mode.c:139)
+==39256==    by 0x112DD7: parseVimMotion (vim_bindings.h:12)
+==39256==    by 0x112ECA: main (main.c:44)
+==39256==  Address 0x4bea680 is 8 bytes after a block of size 120 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B982: fromCSV (parsing.c:47)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== Invalid read of size 8
+==39256==    at 0x10B5A5: writeContents (saving.c:31)
+==39256==    by 0x10B42E: saveSpreadsheet (saving.c:24)
+==39256==    by 0x10F0A0: commandSave (system_cmd.c:10)
+==39256==    by 0x10DC92: runCommand (cmd.c:84)
+==39256==    by 0x111100: parseCliInput (vim_insert_mode.c:139)
+==39256==    by 0x112DD7: parseVimMotion (vim_bindings.h:12)
+==39256==    by 0x112ECA: main (main.c:44)
+==39256==  Address 0x4bea688 is 16 bytes after a block of size 120 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B982: fromCSV (parsing.c:47)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== Invalid write of size 1
+==39256==    at 0x484FF93: memcpy@GLIBC_2.2.5 (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x11015C: create_cell (cell.c:29)
+==39256==    by 0x10B283: setCell (client.c:129)
+==39256==    by 0x111015: setSelectedCells (vim_insert_mode.c:118)
+==39256==    by 0x10AB13: iterSelectedCells (client.c:72)
+==39256==    by 0x11113C: parseCliInput (vim_insert_mode.c:145)
+==39256==    by 0x112DD7: parseVimMotion (vim_bindings.h:12)
+==39256==    by 0x112ECA: main (main.c:44)
+==39256==  Address 0x4c1aa6e is 0 bytes after a block of size 14 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B1C4: cellCreateEmptyDisVal (client.c:120)
+==39256==    by 0x10B231: setCell (client.c:128)
+==39256==    by 0x111015: setSelectedCells (vim_insert_mode.c:118)
+==39256==    by 0x10AB13: iterSelectedCells (client.c:72)
+==39256==    by 0x11113C: parseCliInput (vim_insert_mode.c:145)
+==39256==    by 0x112DD7: parseVimMotion (vim_bindings.h:12)
+==39256==    by 0x112ECA: main (main.c:44)
+==39256== 
+==39256== Invalid read of size 1
+==39256==    at 0x484ED84: __strlen_sse2 (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x4A33DB0: __vfprintf_internal (vfprintf-internal.c:1517)
+==39256==    by 0x4A45519: __vsnprintf_internal (vsnprintf.c:114)
+==39256==    by 0x48949F9: ??? (in /usr/lib/x86_64-linux-gnu/libncurses.so.6.3)
+==39256==    by 0x488E894: vw_printw (in /usr/lib/x86_64-linux-gnu/libncurses.so.6.3)
+==39256==    by 0x488E96C: printw (in /usr/lib/x86_64-linux-gnu/libncurses.so.6.3)
+==39256==    by 0x10D009: renderSingleCell (spreadsheet_ui.c:42)
+==39256==    by 0x10CDD4: renderSingleRow (spreadsheet_ui.c:25)
+==39256==    by 0x10CD89: renderSpreadsheet (spreadsheet_ui.c:20)
+==39256==    by 0x112EF6: main (main.c:47)
+==39256==  Address 0x4c1aa6e is 0 bytes after a block of size 14 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B1C4: cellCreateEmptyDisVal (client.c:120)
+==39256==    by 0x10B231: setCell (client.c:128)
+==39256==    by 0x111015: setSelectedCells (vim_insert_mode.c:118)
+==39256==    by 0x10AB13: iterSelectedCells (client.c:72)
+==39256==    by 0x11113C: parseCliInput (vim_insert_mode.c:145)
+==39256==    by 0x112DD7: parseVimMotion (vim_bindings.h:12)
+==39256==    by 0x112ECA: main (main.c:44)
+==39256== 
+==39256== Invalid read of size 8
+==39256==    at 0x10A92A: freeSpreadsheet (client.c:42)
+==39256==    by 0x111DCD: cleanUp (tui.h:52)
+==39256==    by 0x112FA3: main (main.c:66)
+==39256==  Address 0x4bea678 is 0 bytes after a block of size 120 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B982: fromCSV (parsing.c:47)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== Invalid read of size 8
+==39256==    at 0x10A92D: freeSpreadsheet (client.c:42)
+==39256==    by 0x111DCD: cleanUp (tui.h:52)
+==39256==    by 0x112FA3: main (main.c:66)
+==39256==  Address 0x4bea680 is 8 bytes after a block of size 120 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B982: fromCSV (parsing.c:47)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== Invalid read of size 8
+==39256==    at 0x10A939: freeSpreadsheet (client.c:42)
+==39256==    by 0x111DCD: cleanUp (tui.h:52)
+==39256==    by 0x112FA3: main (main.c:66)
+==39256==  Address 0x4bea688 is 16 bytes after a block of size 120 alloc'd
+==39256==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10B982: fromCSV (parsing.c:47)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== 
+==39256== HEAP SUMMARY:
+==39256==     in use at exit: 143,142 bytes in 228 blocks
+==39256==   total heap usage: 486 allocs, 258 frees, 167,924 bytes allocated
+==39256== 
+==39256== 8 bytes in 1 blocks are definitely lost in loss record 2 of 87
+==39256==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10F47F: strNew (str.c:5)
+==39256==    by 0x10B997: fromCSV (parsing.c:52)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== 152 bytes in 19 blocks are definitely lost in loss record 47 of 87
+==39256==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==39256==    by 0x10F47F: strNew (str.c:5)
+==39256==    by 0x10BA2D: fromCSV (parsing.c:66)
+==39256==    by 0x112E71: main (main.c:34)
+==39256== 
+==39256== LEAK SUMMARY:
+==39256==    definitely lost: 160 bytes in 20 blocks
+==39256==    indirectly lost: 0 bytes in 0 blocks
+==39256==      possibly lost: 712 bytes in 9 blocks
+==39256==    still reachable: 142,270 bytes in 199 blocks
+==39256==         suppressed: 0 bytes in 0 blocks
+==39256== Reachable blocks (those to which a pointer was found) are not shown.
+==39256== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==39256== 
+==39256== For lists of detected and suppressed errors, rerun with: -s
+==39256== ERROR SUMMARY: 196 errors from 19 contexts (suppressed: 0 from 0)

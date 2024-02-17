@@ -36,6 +36,7 @@ static int writeContents(Cellulose* client, char separator, FILE* output) {
                 case t_str:
                     for (int i = 0; i < empty_space; ++i)
                         fputc(separator, output);
+                    empty_space = 0;
                     fprintf(output, "%s%c", cell.cell_value.str, separator);
                     break;
                 case t_int:

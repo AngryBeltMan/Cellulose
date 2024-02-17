@@ -5,10 +5,13 @@
 #include <string.h>
 #include <sys/types.h>
 
+#include "cell.h"
 #include "client.h"
+#include "config.h"
 #include "config_include.h"
 #include "str.h"
 #include "cursor/cursor_include.h"
+#include "vec.h"
 
 Cellulose newEmpty(const char* file_name) {
     spreadsheet_t sheet = (spreadsheet_t)VEC_NEW(row_t);
@@ -20,6 +23,8 @@ Cellulose newEmpty(const char* file_name) {
         .redraw_dividers = true,
         .redraw_spreadsheet = true,
         .redraw_cli = true,
+        .redraw_row_header = true,
+        .redraw_column_header = true,
         .name = file_name,
     };
 }
@@ -36,6 +41,8 @@ void freeSpreadsheet(Cellulose cellulose) {
         // iterates all of the cells in the row
         VEC_ITER(sheet_row, cell_t, row_cell) {
             freeCell(row_cell);
+            if (row_cell.displayed_value)
+                free(row_cell.displayed_value);
         }
         VEC_FREE(sheet_row); // frees the pointer to the rows
     }
@@ -75,7 +82,7 @@ int iterSelectedCells(Cellulose* client, cursor_t* cursor, selected_fn_t fn, voi
 inline void setCellValue(Cellulose *client, coord_int_t x, coord_int_t y, str* cell_input) {
     if (isNum(cell_input))
         CELL_P(y, x).cell_type = t_int,
-        CELL_P(y, x).cell_value.number = strToNum(cell_input->contents, cell_input->len),
+        CELL_P(y, x).cell_value.number = atof(cell_input->contents),
         // free it here because the client will not be able to
         free(cell_input->contents);
     else
@@ -96,24 +103,30 @@ inline void createRowsTo(Cellulose *client, size_t y) {
 inline int createColumnsTo(Cellulose *client, size_t row_index, size_t x) {
     size_t column = ROW_P(row_index).length;
     for (; column <= x; ++column) {
-        cell_t empty_cell = {
-            .cell_type = t_empty,
-        };
+        cell_t empty_cell = createCellEmpty();
         VEC_APPEND(ROW_P(row_index), empty_cell);
+    }
+    return 0;
+}
+
+int cellCreateEmptyDisVal(Cellulose *client, coord_int_t x, coord_int_t y, bool b_exist) {
+    if (!b_exist) {
+        createRowsTo(client, y);
+        createColumnsTo(client, y, x);
+        if (( CELL_P(y, x).displayed_value = malloc(CELL_LEN)) == NULL)
+            return -1;
+    // cell type empty doesn't have displayed_value allocated which means we will need to allocate a new one
+    } else if (CELL_P(y, x).cell_type == t_empty) {
+        if (( CELL_P(y, x).displayed_value = malloc(CELL_LEN)) == NULL)
+            return -1;
     }
     return 0;
 }
 
 // sets the cell at the cursor x and y to the value inside cell_input
 inline int setCell(Cellulose *client, coord_int_t x, coord_int_t y, str* cell_input) {
-    if (!cellExist(client, x, y))
-        createRowsTo(client, y),
-        createColumnsTo(client, y, x);
-    char* output;
-    // update the display value because the value has changed
-    if ((output = calloc(15,1)) == NULL) return -1;
-    create_cell(output, cell_input->contents, cell_input->len);
-    CELL_P(y, x).displayed_value = output;
+    cellCreateEmptyDisVal(client, x, y, cellExist(client, x, y));
+    create_cell(CELL_P(y, x).displayed_value, cell_input->contents, cell_input->len);
     setCellValue(client, x, y, cell_input);
     return 0;
 }

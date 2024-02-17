@@ -14,3 +14,10 @@
     move(CLIENT_SHEET_HEIGHT + 1, 1); \
     attron(COLOR_PAIR(ERROR_MSG_ID)); \
     printw(_fmt, __VA_ARGS__);
+
+// Log the error to and error log file
+void logToFile(char* fmt, ...);
+// Opens or creates the error log file
+void initLogFile();
+// Closes the error log file
+void freeLogFile();

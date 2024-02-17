@@ -2,68 +2,69 @@
 #include "../messages.h"
 #include "../cell.h"
 #include "../vim_bindings/vim_copy_pasting.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
+/// enum that specifies what type of random number should be generated. I.E. a whole number, a floating point value.
+enum rand_type {
+    // chooses a random number between x and y
+    RT_range,
+    // chooses a random integer
+    RT_int,
+    // chooses a random whole number between x and y
+    RT_range_whole,
+};
+
 // information for fillRandom_iter
 struct randInfo {
-    enum {
-        // chooses a random number between x and y
-        RT_range,
-        // chooses a random integer
-        RT_int,
-        // chooses a random whole number between x and y
-        RT_range_whole,
-    } rand_type;
+    enum rand_type rand_type;
     double min;
     double max;
 };
-
+// Generates a random value given certain argments held inside argument info.
+// Arguments:
+// p_out - Pointer value where the random value will be stored. Cannot be null.
+// info - Contains restrictions on the output of the random value. I.e. the range and if it should be a whole number.
+static void genRandNum(cell_num_t *p_out, struct randInfo *p_info) {
+    switch (p_info->rand_type) {
+        case RT_int: *p_out = rand(); break;
+        case RT_range:
+            *p_out = (((double)rand()/RAND_MAX) * (p_info->max - p_info->min)) + p_info->min;
+            break;
+        case RT_range_whole:
+            *p_out = (rand() % (int)(p_info->max - p_info->min)) + p_info->min;
+            break;
+    }
+}
 static int fillRandom_iter(Cellulose *client, coord_int_t x, coord_int_t y, bool exist, void* arg) {
     if (arg == NULL)
         return -1;
-    struct randInfo *info_p = (struct randInfo*)arg;
-    double num;
-    switch (info_p->rand_type) {
-        case RT_int:
-            num = rand();
-            break;
-        case RT_range:
-            num = (((double)rand()/RAND_MAX) * (info_p->max - info_p->min)) + info_p->min;
-            break;
-        case RT_range_whole:
-            num = (rand() % (int)(info_p->max - info_p->min)) + info_p->min;
-            break;
-    }
-    if (!exist) {
-        createRowsTo(client, y);
-        createColumnsTo(client, y, x);
-        if (( CELL_P(y, x).displayed_value = malloc(CELL_LEN)) == NULL)
-            return -1;
-        memset(CELL_P(y, x).displayed_value, ' ', CELL_LEN);
-    // cell type empty doesn't have displayed_value allocated which means we will need to allocate a new one
-    } else if (CELL_P(y, x).cell_type == t_empty) {
-        if (( CELL_P(y, x).displayed_value = malloc(CELL_LEN)) == NULL)
-            return -1;
-        memset(CELL_P(y, x).displayed_value, ' ', CELL_LEN);
-    }
-    // free the old value if it is a string,0 as it is not in use and it is heap allocated
+    struct randInfo *p_info = (struct randInfo*)arg;
+    cell_num_t num;
+    genRandNum(&num, p_info);
+    bool b_whole_num = p_info->rand_type != RT_range;
+    // allocates and sets the attribute cell_t.displayed_value
+    cellCreateEmptyDisVal( client, x, y,  exist);
+    // fills the displayed value with a bunch of spaces
+    memset(CELL_P(y, x).displayed_value, ' ', CELL_LEN);
+    // free the old string value, if it is a string, as it is not longer used
     if (CELL_P(y, x).cell_type == t_str)
         free(CELL_P(y, x).cell_value.str);
+
+    // the difference between setCellWhole and setCellFloat is the formatting of the displayed value. SetCellWhole will not include a decimal point and leading decimal values.
+    if (b_whole_num) {
+        setCellWhole(&CELL_P(y, x), num);
+    } else {
+        setCellFloat(&CELL_P(y, x), num);
+    }
+
     CELL_P(y, x).cell_type = t_int;
     CELL_P(y, x).cell_value.number = num;
-    if (floor(log(num) + 7) > CELL_LEN - 2 ) {
-        snprintf(CELL_P(y, x).displayed_value + 1, CELL_LEN - 2, "%f", num );
-        // and the .. to end of the displayed value to symbolize there is more to cells value
-        CELL_P(y, x).displayed_value[CELL_LEN - 2] = '.';
-        CELL_P(y, x).displayed_value[CELL_LEN - 1] = '.';
-    } else {
-        sprintf(CELL_P(y, x).displayed_value + 1, "%f", num );
-        CELL_P(y, x).displayed_value[strlen(CELL_P(y, x).displayed_value)] = ' ';
-    }
+
     return 0;
 }
 
