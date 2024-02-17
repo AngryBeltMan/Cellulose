@@ -1,4 +1,5 @@
 # Command Documentation
+![2024-02-16 20-03-40 (online-video-cutter com)](https://github.com/AngryBeltMan/Cellulose/assets/107814012/befba4d7-e051-4b53-b591-d48e048d7a64)
 ## Command: rand
 ### Takes 0 arg(s).
 Fills the selected cells with random numbers between 0 and INT::MAX (usually 2^32).

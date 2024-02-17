@@ -1,4 +1,5 @@
 # Formatting Documentation
+![2024-02-16 19-58-04 (online-video-cutter com)(1)(1)](https://github.com/AngryBeltMan/Cellulose/assets/107814012/0dacb74b-02f3-48c3-96d1-08e306872c02)
 ## Formatting an Input
 To format an input use `f|` at the very start.
 ## Parsing an Equation

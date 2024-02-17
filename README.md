@@ -1,5 +1,8 @@
 # Cellulose - A command line spreadsheet editor
 ## WARNING - This project may still have unexpected bugs as it is still a work in progress.
+![2024-02-16 19-47-33 (online-video-cutter com)(1)](https://github.com/AngryBeltMan/Cellulose/assets/107814012/b76c89c1-d5fb-4ca1-961a-9ef9fb4f6540)
+## Download Guide
+[here](https://github.com/AngryBeltMan/Cellulose/blob/master/downloading.md)
 ## Documentation
 ### Command Documentation
 [here](https://github.com/AngryBeltMan/Cellulose/blob/master/src/commands/README.md)
